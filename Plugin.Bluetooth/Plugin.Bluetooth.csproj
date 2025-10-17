@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- ==================== CORE VARIABLES ==================== -->
+	<PropertyGroup>
+		<Project_Name>Plugin.Bluetooth</Project_Name>
+		<Project_Tags>Plugin;Bluetooth;Tools;Toolkit</Project_Tags>
+		<Project_Copyright>Francois Raminosona</Project_Copyright>
+		<Project_Description>Plugin.Bluetooth for .NET</Project_Description>
+	</PropertyGroup>
+
+	<!-- ==================== TARGET FRAMEWORKS ==================== -->
+	<PropertyGroup>
+		<TargetFrameworks>net9.0</TargetFrameworks>
+		<TargetFrameworks>$(TargetFrameworks);net9.0-android</TargetFrameworks>
+		<TargetFrameworks>$(TargetFrameworks);net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>$(TargetFrameworks);net9.0-ios</TargetFrameworks>
+		<TargetFrameworks>$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<!-- ==================== MAUI ==================== -->
+	<PropertyGroup>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<MauiEnablePlatformUsings>true</MauiEnablePlatformUsings>
+	</PropertyGroup>
+
+
+	<!-- ==================== PACKAGE REFERENCES / DEPENDENCIES ==================== -->
+	<ItemGroup Condition=" '$(ContinuousIntegrationBuild)' != 'true' ">
+		<ProjectReference Include="..\Plugin.Bluetooth.Abstractions\Plugin.Bluetooth.Abstractions.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(ContinuousIntegrationBuild)' == 'true' ">
+		<PackageReference Include="Plugin.Bluetooth.Abstractions" Version="$(Version_Full)" />
+	</ItemGroup>
+
+</Project>
