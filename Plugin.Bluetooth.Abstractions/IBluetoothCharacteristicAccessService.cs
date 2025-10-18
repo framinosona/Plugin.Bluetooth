@@ -50,14 +50,14 @@ public interface IBluetoothCharacteristicAccessService
     /// </summary>
     /// <param name="device">The Bluetooth device.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the Bluetooth characteristic, or null if not found.</returns>
-    Task<IBluetoothCharacteristic?> TryGetCharacteristicAsync(IBluetoothDevice device);
+    ValueTask<IBluetoothCharacteristic?> TryGetCharacteristicAsync(IBluetoothDevice device);
 
     /// <summary>
     /// Determines whether the specified device has the characteristic asynchronously.
     /// </summary>
     /// <param name="device">The Bluetooth device.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the device has the characteristic.</returns>
-    Task<bool> HasCharacteristicAsync(IBluetoothDevice device);
+    ValueTask<bool> HasCharacteristicAsync(IBluetoothDevice device);
 
     #endregion
 }
@@ -94,16 +94,17 @@ public interface IBluetoothCharacteristicAccessService<TIn, TOut> : IBluetoothCh
     /// </summary>
     /// <param name="device">The Bluetooth device.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the device can read the characteristic.</returns>
-    Task<bool> CanReadAsync(IBluetoothDevice device);
+    ValueTask<bool> CanReadAsync(IBluetoothDevice device);
 
     /// <summary>
     /// Reads the value of the characteristic asynchronously.
     /// </summary>
     /// <param name="device">The Bluetooth device.</param>
     /// <param name="useLastValueIfPreviouslyRead">If true, uses the last value if it was previously read.</param>
-    /// <param name="timeout">The timeout for the read operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the read operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous read operation. The task result contains the value read.</returns>
-    Task<TIn> ReadAsync(IBluetoothDevice device, bool useLastValueIfPreviouslyRead = false, int timeout = -1);
+    Task<TIn> ReadAsync(IBluetoothDevice device, bool useLastValueIfPreviouslyRead = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -114,7 +115,7 @@ public interface IBluetoothCharacteristicAccessService<TIn, TOut> : IBluetoothCh
     /// </summary>
     /// <param name="device">The Bluetooth device.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the device can write to the characteristic.</returns>
-    Task<bool> CanWriteAsync(IBluetoothDevice device);
+    ValueTask<bool> CanWriteAsync(IBluetoothDevice device);
 
     /// <summary>
     /// Writes a value to the characteristic asynchronously.
@@ -122,9 +123,10 @@ public interface IBluetoothCharacteristicAccessService<TIn, TOut> : IBluetoothCh
     /// <param name="device">The Bluetooth device.</param>
     /// <param name="value">The value to write.</param>
     /// <param name="skipIfOldValueMatchesNewValue">If true, skips writing if the old value matches the new value.</param>
-    /// <param name="timeout">The timeout for the write operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the write operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous write operation.</returns>
-    Task WriteAsync(IBluetoothDevice device, TOut value, bool skipIfOldValueMatchesNewValue = false, int timeout = -1);
+    Task WriteAsync(IBluetoothDevice device, TOut value, bool skipIfOldValueMatchesNewValue = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -142,7 +144,7 @@ public interface IBluetoothCharacteristicAccessService<TIn, TOut> : IBluetoothCh
     /// </summary>
     /// <param name="device">The Bluetooth device.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the device can listen to notifications from the characteristic.</returns>
-    Task<bool> CanListenAsync(IBluetoothDevice device);
+    ValueTask<bool> CanListenAsync(IBluetoothDevice device);
 
     /// <summary>
     /// Subscribes to notifications from the characteristic asynchronously.
@@ -166,7 +168,7 @@ public interface IBluetoothCharacteristicAccessService<TIn, TOut> : IBluetoothCh
     /// <param name="device">The Bluetooth device.</param>
     /// <param name="listener">The listener to check.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the device is subscribed to notifications from the characteristic.</returns>
-    Task<bool> IsSubscribedAsync(IBluetoothDevice device, OnNotificationReceived listener);
+    ValueTask<bool> IsSubscribedAsync(IBluetoothDevice device, OnNotificationReceived listener);
 
     /// <summary>
     /// Gets the listeners for the specified device.

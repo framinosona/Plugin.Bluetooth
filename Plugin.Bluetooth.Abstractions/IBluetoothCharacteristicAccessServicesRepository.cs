@@ -16,7 +16,7 @@ public interface IBluetoothCharacteristicAccessServicesRepository
     /// Asynchronously adds all service definitions found in the current assembly.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task AddAllServiceDefinitionsInCurrentAssemblyAsync();
+    ValueTask AddAllServiceDefinitionsInCurrentAssemblyAsync();
 
     /// <summary>
     /// Adds all service definitions found in the specified assembly by name.
@@ -29,7 +29,7 @@ public interface IBluetoothCharacteristicAccessServicesRepository
     /// </summary>
     /// <param name="assemblyName">The name of the assembly.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task AddAllServiceDefinitionsInAssemblyAsync(string assemblyName);
+    ValueTask AddAllServiceDefinitionsInAssemblyAsync(string assemblyName);
 
     /// <summary>
     /// Adds all service definitions found in the specified assembly.
@@ -42,7 +42,7 @@ public interface IBluetoothCharacteristicAccessServicesRepository
     /// </summary>
     /// <param name="assembly">The assembly.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task AddAllServiceDefinitionsInAssemblyAsync(Assembly assembly);
+    ValueTask AddAllServiceDefinitionsInAssemblyAsync(Assembly assembly);
 
     /// <summary>
     /// Adds a known service name to the repository.

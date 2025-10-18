@@ -24,8 +24,8 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// <summary>
     /// Refreshes the device asynchronously.
     /// </summary>
-    /// <returns>A task that represents the asynchronous refresh operation.</returns>
-    Task RefreshAsync();
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    ValueTask RefreshAsync();
 
     #region Device
 
@@ -67,9 +67,10 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// Waits for advertisement information asynchronously.
     /// </summary>
     /// <param name="filter">The filter to apply to the advertisement information.</param>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the advertisement information.</returns>
-    Task<IBluetoothAdvertisement> WaitForAdvertisementAsync(Func<IBluetoothAdvertisement, bool>? filter = null, int timeout = -1);
+    Task<IBluetoothAdvertisement> WaitForAdvertisementAsync(Func<IBluetoothAdvertisement, bool>? filter = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Handles the advertisement information received event.
@@ -90,9 +91,10 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// Waits for the device to be connected or disconnected asynchronously.
     /// </summary>
     /// <param name="isConnected">True to wait for the device to be connected, false to wait for it to be disconnected.</param>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task WaitForIsConnectedAsync(bool isConnected, int timeout = -1);
+    Task WaitForIsConnectedAsync(bool isConnected, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #region Connecting
 
@@ -114,23 +116,25 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// <summary>
     /// Connects to the device if it is not already connected asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     /// <exception cref="TimeoutException">Thrown if the connection attempt times out.</exception>
     /// <exception cref="DeviceFailedToConnectException">Thrown if the connection attempt fails.</exception>
     /// <exception cref="NativeBluetoothException">Thrown if the native connection layer fails.</exception>
-    Task ConnectIfNeededAsync(int timeout = -1);
+    ValueTask ConnectIfNeededAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Connects to the device asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     /// <exception cref="TimeoutException">Thrown if the connection attempt times out.</exception>
     /// <exception cref="DeviceFailedToConnectException">Thrown if the connection attempt fails.</exception>
     /// <exception cref="DeviceIsAlreadyConnectedException">Thrown if the device is already connecting.</exception>
     /// <exception cref="NativeBluetoothException">Thrown if the native connection layer fails.</exception>
-    Task ConnectAsync(int timeout = -1);
+    Task ConnectAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -154,23 +158,25 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// <summary>
     /// Disconnects from the device if it is not already disconnected asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     /// <exception cref="TimeoutException">Thrown if the disconnection attempt times out.</exception>
     /// <exception cref="DeviceFailedToConnectException">Thrown if the disconnection attempt fails.</exception>
     /// <exception cref="NativeBluetoothException">Thrown if the native disconnection layer fails.</exception>
-    Task DisconnectIfNeededAsync(int timeout = -1);
+    ValueTask DisconnectIfNeededAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Disconnects from the device asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     /// <exception cref="TimeoutException">Thrown if the disconnection attempt times out.</exception>
     /// <exception cref="DeviceFailedToDisconnectException">Thrown if the disconnection attempt fails.</exception>
     /// <exception cref="DeviceIsAlreadyDisconnectedException">Thrown if the device is already disconnected.</exception>
     /// <exception cref="NativeBluetoothException">Thrown if the native connection layer fails.</exception>
-    Task DisconnectAsync(int timeout = -1);
+    Task DisconnectAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #region UnexpectedDisconnection
 
@@ -215,9 +221,10 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// <summary>
     /// Waits for the name of the device to change asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task WaitForNameToChangeAsync(int timeout = -1);
+    Task WaitForNameToChangeAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -239,9 +246,10 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// </summary>
     /// <param name="clearBeforeExploring">True to clear the services before exploring.</param>
     /// <param name="exploreCharacteristicsToo">True to explore characteristics as well.</param>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ExploreServicesAsync(bool clearBeforeExploring = false, bool exploreCharacteristicsToo = false, int timeout = -1);
+    Task ExploreServicesAsync(bool clearBeforeExploring = false, bool exploreCharacteristicsToo = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -250,7 +258,7 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// <summary>
     /// Resets the list of services and characteristics, and stops all subscriptions and notifications.
     /// </summary>
-    Task ClearServicesAsync();
+    ValueTask ClearServicesAsync();
 
 
     /// <summary>
@@ -265,14 +273,14 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// </summary>
     /// <param name="id">The ID of the service to check for.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the device has the service.</returns>
-    Task<bool> HasServiceAsync(Guid id);
+    ValueTask<bool> HasServiceAsync(Guid id);
 
     /// <summary>
     /// Gets the service that matches the specified filter asynchronously.
     /// </summary>
     /// <param name="filter">The filter to apply to the services.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the service that matches the filter, or null if no such service exists.</returns>
-    Task<IBluetoothService?> GetServiceOrDefaultAsync(Func<IBluetoothService, bool> filter);
+    ValueTask<IBluetoothService?> GetServiceOrDefaultAsync(Func<IBluetoothService, bool> filter);
 
     /// <summary>
     /// Gets the service that matches the specified filter.
@@ -286,7 +294,7 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// </summary>
     /// <param name="id">The ID of the service to get.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the service with the specified ID, or null if no such service exists.</returns>
-    Task<IBluetoothService?> GetServiceOrDefaultAsync(Guid id);
+    ValueTask<IBluetoothService?> GetServiceOrDefaultAsync(Guid id);
 
     /// <summary>
     /// Gets the service with the specified ID.
@@ -307,7 +315,7 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// </summary>
     /// <param name="filter">The filter to apply to the services.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the services that match the filter, or all services if the filter is null.</returns>
-    Task<IEnumerable<IBluetoothService>> GetServicesAsync(Func<IBluetoothService, bool>? filter = null);
+    ValueTask<IEnumerable<IBluetoothService>> GetServicesAsync(Func<IBluetoothService, bool>? filter = null);
 
     /// <summary>
     /// Gets the services with the specified ID.
@@ -321,7 +329,7 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// </summary>
     /// <param name="id">The ID of the services to get.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the services with the specified ID.</returns>
-    Task<IEnumerable<IBluetoothService>> GetServicesAsync(Guid id);
+    ValueTask<IEnumerable<IBluetoothService>> GetServicesAsync(Guid id);
 
     #endregion
 
@@ -345,16 +353,18 @@ public partial interface IBluetoothDevice : INotifyPropertyChanged, IAsyncDispos
     /// <summary>
     /// Reads the signal strength asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ReadSignalStrengthAsync(int timeout = -1);
+    Task ReadSignalStrengthAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Tries to read the signal strength asynchronously.
     /// </summary>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task TryReadSignalStrengthAsync(int timeout = -1);
+    Task TryReadSignalStrengthAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 

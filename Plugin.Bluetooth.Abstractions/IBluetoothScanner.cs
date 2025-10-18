@@ -36,27 +36,27 @@ public partial interface IBluetoothScanner : IBluetoothManager
     /// </summary>
     /// <param name="devices">The devices to clean.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-    Task CleanAsync(IEnumerable<IBluetoothDevice> devices);
+    ValueTask CleanAsync(IEnumerable<IBluetoothDevice> devices);
 
     /// <summary>
     /// Cleans resources associated with a specific Bluetooth device.
     /// </summary>
     /// <param name="device">The device to clean.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-    Task CleanAsync(IBluetoothDevice? device);
+    ValueTask CleanAsync(IBluetoothDevice? device);
 
     /// <summary>
     /// Cleans resources associated with a Bluetooth device by its ID.
     /// </summary>
     /// <param name="deviceId">The ID of the device to clean.</param>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-    Task CleanAsync(string deviceId);
+    ValueTask CleanAsync(string deviceId);
 
     /// <summary>
     /// Cleans all resources associated with Bluetooth devices. This includes all devices, services, and characteristics.
     /// </summary>
     /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-    Task CleanAsync();
+    ValueTask CleanAsync();
 
     #endregion
 
@@ -71,17 +71,19 @@ public partial interface IBluetoothScanner : IBluetoothManager
     /// Waits for a Bluetooth device with the specified ID to appear or returns it if already available.
     /// </summary>
     /// <param name="id">The ID of the device to wait for.</param>
-    /// <param name="timeout">Optional timeout in milliseconds. Defaults to -1 for no timeout.</param>
+    /// <param name="timeout">Optional timeout. Defaults to null for no timeout.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The <see cref="IBluetoothDevice" /> when it appears.</returns>
-    Task<IBluetoothDevice> WaitForDeviceToAppearAsync(string id, int timeout = -1);
+    Task<IBluetoothDevice> WaitForDeviceToAppearAsync(string id, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Waits for the first Bluetooth device that matches the specified filter to appear.
     /// </summary>
     /// <param name="filter">A function to filter devices. Should return true for matching devices.</param>
-    /// <param name="timeout">Optional timeout in milliseconds. Defaults to -1 for no timeout.</param>
+    /// <param name="timeout">Optional timeout. Defaults to null for no timeout.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The <see cref="IBluetoothDevice" /> that matches the filter when it appears.</returns>
-    Task<IBluetoothDevice> WaitForDeviceToAppearAsync(Func<IBluetoothDevice, bool> filter, int timeout = -1);
+    Task<IBluetoothDevice> WaitForDeviceToAppearAsync(Func<IBluetoothDevice, bool> filter, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 

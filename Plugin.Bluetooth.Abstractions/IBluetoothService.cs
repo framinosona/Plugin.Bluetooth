@@ -28,9 +28,10 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// Explores the characteristics of the service asynchronously.
     /// </summary>
     /// <param name="clearBeforeExploring">True to clear the characteristics before exploring.</param>
-    /// <param name="timeout">The timeout for the operation, in milliseconds.</param>
+    /// <param name="timeout">The timeout for the operation.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ExploreCharacteristicsAsync(bool clearBeforeExploring = false, int timeout = -1);
+    Task ExploreCharacteristicsAsync(bool clearBeforeExploring = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
@@ -39,7 +40,7 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// <summary>
     /// Clears the characteristics of the service.
     /// </summary>
-    Task ClearCharacteristicsAsync();
+    ValueTask ClearCharacteristicsAsync();
 
     #endregion
 
@@ -70,7 +71,7 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// </summary>
     /// <param name="id">The ID of the characteristic to check for.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the service has the characteristic.</returns>
-    Task<bool> HasCharacteristicAsync(Guid id);
+    ValueTask<bool> HasCharacteristicAsync(Guid id);
 
     /// <summary>
     /// Checks if the service has a characteristic with the specified ID.
@@ -88,7 +89,7 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// </summary>
     /// <param name="id">The ID of the characteristic to get.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the characteristic with the specified ID, or null if no such characteristic exists.</returns>
-    Task<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Guid id);
+    ValueTask<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Guid id);
 
     /// <summary>
     /// Gets the characteristic with the specified ID.
@@ -102,7 +103,7 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// </summary>
     /// <param name="filter">The filter to apply to the characteristics.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the characteristic that matches the filter, or null if no such characteristic exists.</returns>
-    Task<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Func<IBluetoothCharacteristic, bool> filter);
+    ValueTask<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Func<IBluetoothCharacteristic, bool> filter);
 
     /// <summary>
     /// Gets the characteristic that matches the specified filter.
@@ -116,7 +117,7 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// </summary>
     /// <param name="filter">The filter to apply to the characteristics. If null, returns all characteristics.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the characteristics that match the filter, or all characteristics if the filter is null.</returns>
-    Task<IEnumerable<IBluetoothCharacteristic>> GetCharacteristicsAsync(Func<IBluetoothCharacteristic, bool>? filter = null);
+    ValueTask<IEnumerable<IBluetoothCharacteristic>> GetCharacteristicsAsync(Func<IBluetoothCharacteristic, bool>? filter = null);
 
     /// <summary>
     /// Gets the characteristics that match the specified filter.
