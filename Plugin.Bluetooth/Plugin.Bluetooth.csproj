@@ -21,9 +21,7 @@
 	<PropertyGroup>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
-		<MauiEnablePlatformUsings>true</MauiEnablePlatformUsings>
 	</PropertyGroup>
-
 
 	<!-- ==================== PACKAGE REFERENCES / DEPENDENCIES ==================== -->
 	<ItemGroup Condition=" '$(ContinuousIntegrationBuild)' != 'true' ">
