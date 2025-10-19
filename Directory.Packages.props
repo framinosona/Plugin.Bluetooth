@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageVersion Include="Plugin.Bluetooth.Abstractions" Version="$(Version_Full)" />
 
-    <PackageVersion Include="Plugin.ByteArrays" Version="1.0.18" />
+    <PackageVersion Include="Plugin.ByteArrays" Version="1.0.20" />
     <PackageVersion Include="Plugin.BaseTypeExtensions" Version="1.0.7" />
   </ItemGroup>
 
