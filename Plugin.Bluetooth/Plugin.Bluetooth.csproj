@@ -28,7 +28,33 @@
 		<ProjectReference Include="..\Plugin.Bluetooth.Abstractions\Plugin.Bluetooth.Abstractions.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition=" '$(ContinuousIntegrationBuild)' == 'true' ">
-		<PackageReference Include="Plugin.Bluetooth.Abstractions" Version="$(Version_Full)" />
+		<PackageReference Include="Plugin.Bluetooth.Abstractions" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Plugin.ByteArrays" />
+		<PackageReference Include="Plugin.BaseTypeExtensions" />
+	</ItemGroup>
+
+
+	<!-- ==================== NESTED FILES ======================= -->
+	<ItemGroup>
+		<!-- Files dependent on eachother -->
+		<Compile Update="**\BaseBluetoothCharacteristic.*.cs">
+			<DependentUpon>BaseBluetoothCharacteristic.cs</DependentUpon>
+		</Compile>
+		<Compile Update="**\BaseBluetoothDevice.*.cs">
+			<DependentUpon>BaseBluetoothDevice.cs</DependentUpon>
+		</Compile>
+		<Compile Update="**\BaseBluetoothManager.*.cs">
+			<DependentUpon>BaseBluetoothManager.cs</DependentUpon>
+		</Compile>
+		<Compile Update="**\BaseBluetoothScanner.*.cs">
+			<DependentUpon>BaseBluetoothScanner.cs</DependentUpon>
+		</Compile>
+		<Compile Update="**\BaseBluetoothService.*.cs">
+			<DependentUpon>BaseBluetoothService.cs</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 </Project>
