@@ -143,6 +143,18 @@
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup> -->
 
+  <!-- ==================== ARCHIVED FILES ======================= -->
+  <ItemGroup>
+    <Compile Remove="**/Archive/**/*.*" />
+    <None Include="**/Archive/**/*.*" Pack="false" />
+  </ItemGroup>
+
+  <!-- ==================== DOCUMENTATION ======================= -->
+  <ItemGroup>
+    <Compile Remove="**/Documentation/**/*.*" />
+    <None Include="**/Documentation/**/*.*" Pack="false" />
+  </ItemGroup>
+
   <!-- ==================== MAUI INTEGRATION ==================== -->
   <PropertyGroup>
     <MauiTargetsFile Condition=" $(MauiTargetsFile) == ''">$([System.IO.Path]::Combine($(MSBuildThisFileDirectory), `Directory.Build.Maui.targets`))</MauiTargetsFile>
