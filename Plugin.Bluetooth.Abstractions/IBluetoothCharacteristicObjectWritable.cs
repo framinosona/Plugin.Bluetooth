@@ -9,5 +9,5 @@ public interface IBluetoothCharacteristicObjectWritable
     /// Converts the object to a byte array.
     /// </summary>
     /// <returns>A byte array representation of the object.</returns>
-    ReadOnlyMemory<byte> ToByteArray();
+    ReadOnlySpan<byte> ToByteArray();
 }

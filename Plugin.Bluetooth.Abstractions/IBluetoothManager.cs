@@ -3,7 +3,7 @@ using System.ComponentModel;
 namespace Plugin.Bluetooth.Abstractions;
 
 /// <summary>
-/// Interface for managing Bluetooth operations and state.
+/// Interface for managing Bluetooth operations and state. Base class for both the BluetoothScanner and BluetoothBroadcaster.
 /// </summary>
 public interface IBluetoothManager : INotifyPropertyChanged
 {
@@ -12,86 +12,16 @@ public interface IBluetoothManager : INotifyPropertyChanged
     /// </summary>
     bool IsBluetoothOn { get; }
 
-    /// <summary>
-    /// Gets a value indicating whether the Bluetooth manager is actively running.
-    /// </summary>
-    bool IsRunning { get; }
+    event EventHandler<BluetoothStateChangedEventArgs> BluetoothStateChanged;
 
     /// <summary>
-    /// Asynchronously initializes the Bluetooth manager. Might trigger permission popups.
+    /// Gets the Bluetooth scanner instance associated with this manager.
     /// </summary>
-    /// <returns>A task that represents the asynchronous initialization operation.</returns>
-    ValueTask InitializeAsync();
-
-    #region Start
+    ValueTask<IBluetoothScanner> GetScannerAsync();
 
     /// <summary>
-    /// Gets a value indicating whether the Bluetooth manager is starting.
+    /// Gets the Bluetooth broadcaster instance associated with this manager.
     /// </summary>
-    bool IsStarting { get; }
+    ValueTask<IBluetoothBroadcaster> GetBroadcasterAsync();
 
-    event EventHandler Starting;
-
-    event EventHandler Started;
-
-    /// <summary>
-    /// Asynchronously starts the Bluetooth manager with an optional timeout.
-    /// </summary>
-    /// <param name="timeout">An optional timeout. Defaults to null, indicating no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous start operation.</returns>
-    /// <remarks>Ensures that the Bluetooth manager is initialized and ready for use.</remarks>
-    Task StartAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Asynchronously starts the Bluetooth manager if it is not already running, with an optional timeout.
-    /// </summary>
-    /// <param name="timeout">An optional timeout. Defaults to null, indicating no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous start operation.</returns>
-    /// <remarks>Checks if the Bluetooth manager is already running before attempting to start it.</remarks>
-    Task StartIfNeededAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-
-    #endregion
-
-    #region Stop
-
-    /// <summary>
-    /// Gets a value indicating whether the Bluetooth manager is stopping.
-    /// </summary>
-    bool IsStopping { get; }
-
-    event EventHandler Stopping;
-
-    event EventHandler Stopped;
-
-    /// <summary>
-    /// Asynchronously stops the Bluetooth manager with an optional timeout.
-    /// </summary>
-    /// <param name="timeout">An optional timeout. Defaults to null, indicating no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous stop operation.</returns>
-    /// <remarks>Ensures that the Bluetooth manager and its resources are safely released.</remarks>
-    Task StopAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Asynchronously stops the Bluetooth manager if it is running, with an optional timeout.
-    /// </summary>
-    /// <param name="timeout">An optional timeout. Defaults to null, indicating no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous stop operation.</returns>
-    /// <remarks>Checks if the Bluetooth manager is running before attempting to stop it.</remarks>
-    Task StopIfNeededAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-
-    #endregion
-
-
-    /// <summary>
-    /// Asynchronously restarts the Bluetooth manager with an optional timeout.
-    /// </summary>
-    /// <param name="timeout">An optional timeout. Defaults to null, indicating no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous restart operation.</returns>
-    /// <remarks>Combines a call to <see cref="StopAsync" /> followed by <see cref="StartAsync" /> to reset the manager.</remarks>
-    Task RestartAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 }
