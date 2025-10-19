@@ -95,7 +95,7 @@ public interface IBluetoothCharacteristic : INotifyPropertyChanged, IAsyncDispos
     /// <param name="timeout">The timeout for the write operation</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A task that represents the asynchronous write operation.</returns>
-    Task WriteValueAsync(ReadOnlyMemory<byte> value, bool skipIfOldValueMatchesNewValue = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+    Task WriteValueAsync(ReadOnlySpan<byte> value, bool skipIfOldValueMatchesNewValue = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Reads the listening status of the characteristic asynchronously.
