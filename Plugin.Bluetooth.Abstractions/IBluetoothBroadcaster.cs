@@ -2,7 +2,7 @@ namespace Plugin.Bluetooth.Abstractions;
 /// <summary>
 /// Interface for managing Bluetooth broadcasting operations, extending <see cref="IBluetoothManager" />.
 /// </summary>
-public interface IBluetoothBroadcaster : IBluetoothManager
+public interface IBluetoothBroadcaster : IBluetoothActivity
 {
     /// <summary>
     /// Sets the advertising data asynchronously.

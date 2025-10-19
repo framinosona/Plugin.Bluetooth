@@ -8,8 +8,8 @@ namespace Plugin.Bluetooth.Abstractions.Exceptions;
 ///     allowing for easier debugging and tracking of scanner-related issues.
 /// </remarks>
 /// <seealso cref="IBluetoothScanner" />
-/// <seealso cref="ManagerException" />
-public abstract class ScannerException : ManagerException
+/// <seealso cref="ActivityException" />
+public abstract class ScannerException : ActivityException
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="ScannerException"/> class.

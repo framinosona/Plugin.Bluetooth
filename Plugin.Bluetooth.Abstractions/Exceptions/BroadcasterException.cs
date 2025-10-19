@@ -8,8 +8,8 @@ namespace Plugin.Bluetooth.Abstractions.Exceptions;
 ///     allowing for easier debugging and tracking of broadcaster-related issues.
 /// </remarks>
 /// <seealso cref="IBluetoothBroadcaster" />
-/// <seealso cref="ManagerException" />
-public abstract class BroadcasterException : ManagerException
+/// <seealso cref="ActivityException" />
+public abstract class BroadcasterException : ActivityException
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="BroadcasterException"/> class.

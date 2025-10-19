@@ -211,13 +211,16 @@ public class IsAlreadyStartedException : FailedToStartException
     /// <param name="manager">The Bluetooth manager to check.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="manager"/> is null.</exception>
     /// <exception cref="IsAlreadyStartedException">Thrown when the manager is already running.</exception>
+    /// <remarks>
+    ///     This method is deprecated. Use <see cref="ActivityIsAlreadyStartedException.ThrowIfIsStarted(IBluetoothActivity)"/> instead.
+    /// </remarks>
+    [Obsolete("Use ActivityIsAlreadyStartedException.ThrowIfIsStarted(IBluetoothActivity) instead. This will be removed in a future version.")]
     public static void ThrowIfIsStarted(IBluetoothManager manager)
     {
         ArgumentNullException.ThrowIfNull(manager);
-        if (manager.IsRunning)
-        {
-            throw new IsAlreadyStartedException(manager);
-        }
+        // Note: IBluetoothManager no longer has IsRunning property
+        // This method is kept for backward compatibility but should not be used
+        throw new IsAlreadyStartedException(manager, "Manager lifecycle methods are deprecated. Use IBluetoothActivity instead.");
     }
 }
 
@@ -364,7 +367,7 @@ public class IsAlreadyStoppedException : FailedToStopException
     public static void ThrowIfIsStopped(IBluetoothManager manager)
     {
         ArgumentNullException.ThrowIfNull(manager);
-        if (!manager.IsRunning)
+        if (!manager.IsBluetoothOn)
         {
             throw new IsAlreadyStoppedException(manager);
         }
