@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 using Microsoft.Extensions.Logging;
 
-namespace Plugin.Bluetooth.Shared;
+namespace Plugin.Bluetooth;
 
 /// <summary>
 ///     Provides a base class for bindable objects with property change notification, value storage.
