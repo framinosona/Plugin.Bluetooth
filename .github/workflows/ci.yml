@@ -51,10 +51,9 @@ jobs:
 
   build:
     name: '🛠️ Build, Test, Package'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: version
     outputs:
-      has-maui: ${{ steps.check-maui.outputs.exists }}
       has-tests: ${{ steps.check-tests.outputs.exists }}
       has-docs: ${{ steps.check-docs.outputs.exists }}
     steps:
@@ -72,22 +71,12 @@ jobs:
         with:
           config-file: ${{ github.workspace }}/global.json
 
-      # ============================ MAUI ============================
-      - name: '🔍 Check if Maui workloads are needed'
-        id: check-maui
-        run: |
-          if [ -d "${{ github.workspace }}/${{ env.PROJECT_NAME }}.Maui" ]; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: '📲 Install .NET MAUI workloads'
+      - name: '📲 Install .NET MAUI workloads if needed'
         uses: framinosona/github_actions/dotnet@main
-        if: ${{ success() && !cancelled() && steps.check-maui.outputs.exists == 'true' }}
         with:
           command: workload
-          arguments: install maui maui-android maui-ios maui-maccatalyst maui-windows
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx
+          arguments: restore
           show-summary: true
 
       # ============================ BUILD ============================
