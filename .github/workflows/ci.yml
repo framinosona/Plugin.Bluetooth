@@ -75,7 +75,7 @@ jobs:
         uses: framinosona/github_actions/dotnet@main
         with:
           command: workload
-          arguments: restore ${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx
+          arguments: restore '${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx'
           show-summary: true
 
       # ============================ BUILD ============================
