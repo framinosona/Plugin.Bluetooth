@@ -1,0 +1,258 @@
+name: CI
+run-name: >-
+  ${{ github.event_name == 'pull_request' &&
+      format('🏗 {0} - {1} → {2} by {3}', github.event_name, github.head_ref, github.base_ref, github.actor) ||
+      format('🏗 {0} - {1} - {2} by {3}', github.event_name, github.ref_name, github.sha, github.actor) }}
+
+on:
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+  pull_request:
+    branches: [ main, master ]
+    paths-ignore:
+      - '.github/ISSUE_TEMPLATE/**'
+  workflow_dispatch: # Manual trigger
+
+permissions:
+  contents: write       # Needed to create tags and releases
+  packages: write       # Needed if publishing packages
+  actions: read         # Needed to read workflow artifacts
+  checks: write         # Needed to create check runs for code coverage (EnricoMi/publish-unit-test-result-action requires this)
+  id-token: write       # Needed to authenticate with GitHub CLI
+  pages: write          # Needed to deploy to GitHub Pages
+  pull-requests: write  # Needed to post comments on PRs (EnricoMi/publish-unit-test-result-action requires this)
+  issues: read          # Needed to read issues (EnricoMi/publish-unit-test-result-action requires this)
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: '1'
+  PROJECT_NAME: Plugin.Bluetooth
+
+jobs:
+  version:
+    uses: framinosona/github_actions/.github/workflows/reusable-version.yml@main
+    with:
+      config-file: "./.config/version.json"
+      output-txt: 'output/version/version.txt'
+      output-json: 'output/version/version.json'
+      output-props: 'output/version/version.props'
+      artifact-name: 'version'
+      show-summary: true
+
+  build:
+    name: '🛠️ Build, Test, Package'
+    runs-on: ubuntu-latest
+    needs: version
+    outputs:
+      has-maui: ${{ steps.check-maui.outputs.exists }}
+      has-tests: ${{ steps.check-tests.outputs.exists }}
+      has-docs: ${{ steps.check-docs.outputs.exists }}
+    steps:
+      - name: '🔄 Checkout'
+        uses: actions/checkout@v5
+
+      - name: '⬇️ Download Version artifact'
+        uses: actions/download-artifact@v5
+        with:
+          name: version
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Version
+
+      - name: '🔧 Setup .NET'
+        uses: actions/setup-dotnet@v5
+        with:
+          config-file: ${{ github.workspace }}/global.json
+
+      # ============================ MAUI ============================
+      - name: '🔍 Check if Maui workloads are needed'
+        id: check-maui
+        run: |
+          if [ -d "${{ github.workspace }}/${{ env.PROJECT_NAME }}.Maui" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: '📲 Install .NET MAUI workloads'
+        uses: framinosona/github_actions/dotnet@main
+        if: ${{ success() && !cancelled() && steps.check-maui.outputs.exists == 'true' }}
+        with:
+          command: workload
+          arguments: install maui maui-android maui-ios maui-maccatalyst maui-windows
+          show-summary: true
+
+      # ============================ BUILD ============================
+      - name: '🔄 Restore'
+        uses: framinosona/github_actions/dotnet@main
+        with:
+          command: restore
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx
+          show-summary: true
+
+      - name: '🔨 Build'
+        uses: framinosona/github_actions/dotnet@main
+        with:
+          command: build
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx
+          configuration: Release
+          no-restore: true
+          arguments: |
+            -p:Version_Props_Path=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Version/version.props \
+            -p:GeneratePackageOnBuild=true \
+            -p:PackageOutputPath=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages
+          show-summary: true
+
+      - name: '📦 Upload NuGet packages'
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages
+          if-no-files-found: error
+
+      # ============================ TESTS & COVERAGE ============================
+      - name: '🔍 Check if tests are needed'
+        id: check-tests
+        run: |
+          if [ -d "${{ github.workspace }}/${{ env.PROJECT_NAME }}.Tests" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: '🧪 Test with coverage'
+        uses: framinosona/github_actions/dotnet-test@main
+        if: ${{ success() && !cancelled() && steps.check-tests.outputs.exists == 'true' }}
+        with:
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Tests/${{ env.PROJECT_NAME }}.Tests.csproj
+          configuration: Release
+          no-build: true
+          logger: 'trx;LogFileName=test-results.trx'
+          results-directory: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests
+          arguments: |
+            -p:TestOutputPath=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests \
+            -p:CollectCoverage=true \
+            -p:CoverletOutputFormat=cobertura \
+            -p:CoverletOutput=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests/coverage.cobertura.xml
+          show-summary: true
+
+      - name: '📦 Upload test artifacts'
+        uses: actions/upload-artifact@v4
+        if: ${{ success() && !cancelled() && steps.check-tests.outputs.exists == 'true' }}
+        with:
+          name: tests
+          path: ${{ env.PROJECT_NAME }}.Output/Tests/
+
+      # ============================ DOCS ============================
+      - name: '🔍 Check if docs are needed'
+        id: check-docs
+        run: |
+          if [ -d "${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: "📚 Build documentation metadata"
+        uses: framinosona/github_actions/dotnet-docfx-metadata@main
+        if: ${{ success() && !cancelled() && steps.check-docs.outputs.exists == 'true' }}
+        with:
+          config: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/docfx.json
+          output: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/api
+          show-summary: true
+
+      - name: "📚 Build documentation site"
+        uses: framinosona/github_actions/dotnet-docfx-build@main
+        if: ${{ success() && !cancelled() && steps.check-docs.outputs.exists == 'true' }}
+        with:
+          config: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/docfx.json
+          output: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/site
+          show-summary: true
+
+      - name: "📦 Upload GitHub Pages artifact"
+        if: ${{ success() && !cancelled() && github.ref == 'refs/heads/main' && steps.check-docs.outputs.exists == 'true' }}
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/site
+          name: github-pages
+
+  publish-docs:
+    name: '🚀 Deploy to GitHub Pages'
+    if: github.ref == 'refs/heads/main' && needs.build.outputs.has-docs == 'true'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  publish-nuget:
+    name: '🚀 Publish to NuGet.org'
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: nuget-org
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: '📦 Download NuGet packages'
+        uses: actions/download-artifact@v5
+        with:
+          name: packages
+          path: ${{ github.workspace }}/packages
+
+      - name: '📦 Push Packages to NuGet.org'
+        uses: framinosona/github_actions/dotnet-nuget-upload@main
+        with:
+          package-path: ${{ github.workspace }}/packages/*.nupkg
+          api-key: ${{ secrets.NUGET_ORG_API_KEY }}
+          source: 'https://api.nuget.org/v3/index.json'
+          show-summary: true
+
+  publish-tests:
+    name: '🚀 Publish Test Artifacts'
+    if: needs.build.outputs.has-tests == 'true'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: '📦 Download Test Artifacts'
+        uses: actions/download-artifact@v5
+        with:
+          name: tests
+          path: ${{ github.workspace }}/tests
+
+      - name: '📊 Publish Test Results'
+        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        with:
+          files: ${{ github.workspace }}/tests/test-results.trx
+
+  tag-and-release:
+    name: '🏷️ Tag & Release'
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [version, publish-nuget, publish-docs, publish-tests]
+    steps:
+      - name: '🔄 Checkout'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: '🚀 Create GitHub Release'
+        uses: framinosona/github_actions/github-release@main
+        with:
+          tag: ${{ needs.version.outputs.version-fortag }}
+          title: 'Release ${{ needs.version.outputs.version-full }}'
+          generate-notes: 'true'
+          prerelease: ${{ needs.version.outputs.version-isprerelease }}
+          show-summary: 'true'
