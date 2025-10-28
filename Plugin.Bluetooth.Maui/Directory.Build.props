@@ -32,4 +32,5 @@
     <!-- When building on CI, use Release configuration -->
     <Configuration Condition=" '$(Configuration)' == '' AND '$(ContinuousIntegrationBuild)' == 'true' ">Release</Configuration>
   </PropertyGroup>
+
 </Project>

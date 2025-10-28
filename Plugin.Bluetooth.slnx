@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="Plugin.Bluetooth.Abstractions/Plugin.Bluetooth.Abstractions.csproj" />
   <Project Path="Plugin.Bluetooth/Plugin.Bluetooth.csproj" />
+  <Project Path="Plugin.Bluetooth.Maui/Plugin.Bluetooth.Maui.csproj" />
 </Solution>

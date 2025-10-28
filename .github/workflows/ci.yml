@@ -64,12 +64,12 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: version
-          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Version
+          path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Version'
 
       - name: '🔧 Setup .NET'
         uses: actions/setup-dotnet@v5
         with:
-          config-file: ${{ github.workspace }}/global.json
+          config-file: '${{ github.workspace }}/global.json'
 
       - name: '📲 Install .NET MAUI workloads if needed'
         uses: framinosona/github_actions/dotnet@main
@@ -83,27 +83,27 @@ jobs:
         uses: framinosona/github_actions/dotnet@main
         with:
           command: restore
-          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx
+          path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx'
           show-summary: true
 
       - name: '🔨 Build'
         uses: framinosona/github_actions/dotnet@main
         with:
           command: build
-          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx
+          path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.slnx'
           configuration: Release
           no-restore: true
-          arguments: |
-            -p:Version_Props_Path=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Version/version.props \
-            -p:GeneratePackageOnBuild=true \
-            -p:PackageOutputPath=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages
+          arguments: >
+            -p:Version_Props_Path='${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Version/version.props'
+            -p:GeneratePackageOnBuild=true
+            -p:PackageOutputPath='${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages'
           show-summary: true
 
       - name: '📦 Upload NuGet packages'
         uses: actions/upload-artifact@v4
         with:
           name: packages
-          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages
+          path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages'
           if-no-files-found: error
 
       # ============================ TESTS & COVERAGE ============================
@@ -120,16 +120,16 @@ jobs:
         uses: framinosona/github_actions/dotnet-test@main
         if: ${{ success() && !cancelled() && steps.check-tests.outputs.exists == 'true' }}
         with:
-          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Tests/${{ env.PROJECT_NAME }}.Tests.csproj
+          path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Tests/${{ env.PROJECT_NAME }}.Tests.csproj'
           configuration: Release
           no-build: true
           logger: 'trx;LogFileName=test-results.trx'
-          results-directory: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests
-          arguments: |
-            -p:TestOutputPath=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests \
-            -p:CollectCoverage=true \
-            -p:CoverletOutputFormat=cobertura \
-            -p:CoverletOutput=${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests/coverage.cobertura.xml
+          results-directory: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests'
+          arguments: >
+            -p:TestOutputPath='${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests'
+            -p:CollectCoverage=true
+            -p:CoverletOutputFormat=cobertura
+            -p:CoverletOutput='${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Tests/coverage.cobertura.xml'
           show-summary: true
 
       - name: '📦 Upload test artifacts'
@@ -137,7 +137,7 @@ jobs:
         if: ${{ success() && !cancelled() && steps.check-tests.outputs.exists == 'true' }}
         with:
           name: tests
-          path: ${{ env.PROJECT_NAME }}.Output/Tests/
+          path: '${{ env.PROJECT_NAME }}.Output/Tests/'
 
       # ============================ DOCS ============================
       - name: '🔍 Check if docs are needed'
@@ -153,23 +153,23 @@ jobs:
         uses: framinosona/github_actions/dotnet-docfx-metadata@main
         if: ${{ success() && !cancelled() && steps.check-docs.outputs.exists == 'true' }}
         with:
-          config: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/docfx.json
-          output: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/api
+          config: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/docfx.json'
+          output: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/api'
           show-summary: true
 
       - name: "📚 Build documentation site"
         uses: framinosona/github_actions/dotnet-docfx-build@main
         if: ${{ success() && !cancelled() && steps.check-docs.outputs.exists == 'true' }}
         with:
-          config: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/docfx.json
-          output: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/site
+          config: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/docfx.json'
+          output: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/site'
           show-summary: true
 
       - name: "📦 Upload GitHub Pages artifact"
         if: ${{ success() && !cancelled() && github.ref == 'refs/heads/main' && steps.check-docs.outputs.exists == 'true' }}
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/site
+          path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Docs/site'
           name: github-pages
 
   publish-docs:
@@ -197,12 +197,12 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: packages
-          path: ${{ github.workspace }}/packages
+          path: '${{ github.workspace }}/packages'
 
       - name: '📦 Push Packages to NuGet.org'
         uses: framinosona/github_actions/dotnet-nuget-upload@main
         with:
-          package-path: ${{ github.workspace }}/packages/*.nupkg
+          package-path: '${{ github.workspace }}/packages/*.nupkg'
           api-key: ${{ secrets.NUGET_ORG_API_KEY }}
           source: 'https://api.nuget.org/v3/index.json'
           show-summary: true
@@ -217,12 +217,12 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: tests
-          path: ${{ github.workspace }}/tests
+          path: '${{ github.workspace }}/tests'
 
       - name: '📊 Publish Test Results'
         uses: EnricoMi/publish-unit-test-result-action/linux@v2
         with:
-          files: ${{ github.workspace }}/tests/test-results.trx
+          files: '${{ github.workspace }}/tests/test-results.trx'
 
   tag-and-release:
     name: '🏷️ Tag & Release'

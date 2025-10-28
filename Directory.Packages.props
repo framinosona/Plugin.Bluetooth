@@ -6,19 +6,16 @@
   </PropertyGroup>
 
   <!-- ==================== INTERNAL DEPENDENCIES ==================== -->
-  <PropertyGroup>
-    <Version_Full Condition=" '$(Version_Full)' == '' ">1.0.0</Version_Full>
-  </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Plugin.Bluetooth.Abstractions" Version="$(Version_Full)" />
-
-    <PackageVersion Include="Plugin.ByteArrays" Version="1.0.20" />
-    <PackageVersion Include="Plugin.BaseTypeExtensions" Version="1.0.7" />
+    <PackageVersion Include="Plugin.ByteArrays" Version="1.0.21" />
+    <PackageVersion Include="Plugin.BaseTypeExtensions" Version="1.0.11" />
+    <PackageVersion Include="Plugin.ExceptionListeners" Version="1.0.0" />
+    <PackageVersion Include="Plugin.ExceptionListeners.Maui" Version="1.0.0" />
   </ItemGroup>
 
   <!-- ==================== CORE DEPENDENCIES ==================== -->
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
   </ItemGroup>
 
   <!-- ==================== MAUI DEPENDENCIES ==================== -->

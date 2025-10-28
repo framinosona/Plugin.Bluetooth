@@ -5,7 +5,7 @@
       "label": "Clean Documentation",
       "type": "shell",
       "command": "rm",
-      "args": ["-rf", "Plugin.ExceptionListeners.Docs/api", "Plugin.ExceptionListeners.Docs/site"],
+      "args": ["-rf", "Plugin.Bluetooth.Docs/api", "Plugin.Bluetooth.Docs/site"],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -18,7 +18,7 @@
       "label": "Generate API Metadata",
       "type": "shell",
       "command": "dotnet",
-      "args": ["docfx", "metadata", "Plugin.ExceptionListeners.Docs/docfx.json", "--output", "Plugin.ExceptionListeners.Docs/api"],
+      "args": ["docfx", "metadata", "Plugin.Bluetooth.Docs/docfx.json", "--output", "Plugin.Bluetooth.Docs/api"],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -32,7 +32,7 @@
       "label": "Build Documentation Site",
       "type": "shell",
       "command": "dotnet",
-      "args": ["docfx", "build", "Plugin.ExceptionListeners.Docs/docfx.json", "--output", "Plugin.ExceptionListeners.Docs/site"],
+      "args": ["docfx", "build", "Plugin.Bluetooth.Docs/docfx.json", "--output", "Plugin.Bluetooth.Docs/site"],
       "group": "build",
       "presentation": {
         "echo": true,
