@@ -1,6 +1,5 @@
 using Android.Bluetooth;
 using Java.Lang;
-using Microsoft.Extensions.Logging;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
