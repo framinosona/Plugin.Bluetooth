@@ -100,7 +100,7 @@ jobs:
           show-summary: true
 
       - name: '📦 Upload NuGet packages'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: packages
           path: '${{ github.workspace }}/${{ env.PROJECT_NAME }}.Output/Packages'
@@ -133,7 +133,7 @@ jobs:
           show-summary: true
 
       - name: '📦 Upload test artifacts'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: ${{ success() && !cancelled() && steps.check-tests.outputs.exists == 'true' }}
         with:
           name: tests
