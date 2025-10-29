@@ -5,8 +5,6 @@ namespace Plugin.Bluetooth.PlatformSpecific;
 
 public partial class AdvertiseCallbackProxy
 {
-    #region Nested type: IBroadcaster
-
     /// <summary>
     /// Interface for handling Bluetooth LE advertising callbacks.
     /// Extends the base broadcaster interface with Android-specific callback methods.
@@ -25,8 +23,6 @@ public partial class AdvertiseCallbackProxy
         /// <param name="errorCode">The error code indicating why advertising failed to start.</param>
         void OnStartFailure(AdvertiseFailure errorCode);
     }
-
-    #endregion
 }
 
 #pragma warning restore CA1034 // Nested types should not be visible
