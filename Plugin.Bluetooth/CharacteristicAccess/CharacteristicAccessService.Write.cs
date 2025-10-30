@@ -18,9 +18,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
             var characteristic = await GetCharacteristicAsync(device).ConfigureAwait(false);
             return characteristic.CanWrite;
         }
-#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
         {
             // LOG : ERROR - Error checking if characteristic can be written {ex}
             return false;

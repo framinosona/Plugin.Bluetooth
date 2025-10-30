@@ -23,9 +23,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
             var characteristic = await GetCharacteristicAsync(device).ConfigureAwait(false);
             return characteristic.CanListen;
         }
-#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)
-#pragma warning restore CA1031 // Do not catch general exception types
         {
             // LOG : ERROR - Error checking if characteristic can be listened
             _ = ex; // Suppress unused variable warning
@@ -99,9 +97,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
                 return _listeners.Any(tuple => tuple.Item1.Equals(characteristic) && tuple.Item2 == listener);
             }
         }
-#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)
-#pragma warning restore CA1031 // Do not catch general exception types
         {
             // LOG : ERROR - Error checking if listener is subscribed
             _ = ex; // Suppress unused variable warning

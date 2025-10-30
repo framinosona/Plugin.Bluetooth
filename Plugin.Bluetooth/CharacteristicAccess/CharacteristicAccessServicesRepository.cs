@@ -1,5 +1,4 @@
 using Plugin.Bluetooth.Abstractions;
-using Plugin.Bluetooth.Helpers;
 
 using System.Reflection;
 
@@ -37,13 +36,13 @@ public class CharacteristicAccessServicesRepository : BaseBindableObject, IBluet
     /// <inheritdoc />
     public void AddAllServiceDefinitionsInAssembly(string assemblyName)
     {
-        AddAllServiceDefinitionsInAssembly(AssemblyHelpers.GetAssemblyFromName(assemblyName));
+        AddAllServiceDefinitionsInAssembly(GetAssemblyFromName(assemblyName));
     }
 
     /// <inheritdoc />
     public ValueTask AddAllServiceDefinitionsInAssemblyAsync(string assemblyName)
     {
-        return AddAllServiceDefinitionsInAssemblyAsync(AssemblyHelpers.GetAssemblyFromName(assemblyName));
+        return AddAllServiceDefinitionsInAssemblyAsync(GetAssemblyFromName(assemblyName));
     }
 
     /// <inheritdoc />
@@ -212,4 +211,19 @@ public class CharacteristicAccessServicesRepository : BaseBindableObject, IBluet
     }
 
     #endregion
+
+    /// <summary>
+    ///   Gets an assembly from its name.
+    /// </summary>
+    /// <param name="assemblyName"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    protected static Assembly GetAssemblyFromName(string assemblyName)
+    {
+        ArgumentNullException.ThrowIfNull(assemblyName, nameof(assemblyName));
+
+        return AppDomain.CurrentDomain.GetAssemblies()
+            .FirstOrDefault(a => a.GetName().Name == assemblyName)
+               ?? throw new InvalidOperationException($"Assembly with name '{assemblyName}' not found in current AppDomain.");
+    }
 }
