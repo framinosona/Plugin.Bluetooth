@@ -72,6 +72,9 @@ csharp_style_require_documentation = true:suggestion
 # IDE0270: Use coalesce expression
 dotnet_style_coalesce_expression = false
 
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
 [*.xml]
 max_line_length = 0
 indent_style = space

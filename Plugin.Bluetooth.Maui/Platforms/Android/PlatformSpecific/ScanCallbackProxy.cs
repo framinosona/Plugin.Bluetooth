@@ -3,7 +3,6 @@ using Plugin.Bluetooth.Exceptions;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Android Bluetooth LE scan callback proxy that handles scan events.
@@ -80,4 +79,3 @@ public partial class ScanCallbackProxy : ScanCallback
     }
 }
 
-#pragma warning restore CA1031 // Do not catch general exception types

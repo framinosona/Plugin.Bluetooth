@@ -4,7 +4,6 @@ using Windows.Devices.Bluetooth.Advertisement;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Proxy class for Windows Bluetooth LE advertisement watcher that provides event handling
@@ -69,4 +68,3 @@ public sealed partial class BluetoothLeAdvertisementWatcherProxy
     }
 }
 
-#pragma warning restore CA1031 // Do not catch general exception types

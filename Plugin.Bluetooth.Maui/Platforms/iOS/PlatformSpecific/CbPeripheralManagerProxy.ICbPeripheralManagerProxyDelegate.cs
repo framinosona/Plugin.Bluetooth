@@ -6,7 +6,6 @@ using Foundation;
 namespace Plugin.Bluetooth.PlatformSpecific;
 
 // Mapping native APIs leads to unclean interfaces, ignoring warnings here
-#pragma warning disable CA1031 // Do not catch general exception types
 #pragma warning disable CA1034 // Nested types should not be visible
 #pragma warning disable CA1711 // Identifiers should not have incorrect suffix
 #pragma warning disable CA1716 // Identifiers should not match keywords
@@ -93,4 +92,3 @@ public partial class CbPeripheralManagerProxy
 #pragma warning restore CA1034 // Nested types should not be visible
 #pragma warning restore CA1711 // Identifiers should not have incorrect suffix
 #pragma warning restore CA1716 // Identifiers should not match keywords
-#pragma warning restore CA1031 // Do not catch general exception types

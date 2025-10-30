@@ -4,7 +4,6 @@ using Plugin.Bluetooth.Exceptions;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Android Bluetooth GATT server callback proxy that handles GATT server events.
@@ -450,4 +449,3 @@ public partial class BluetoothGattServerCallbackProxy : BluetoothGattServerCallb
     }
 }
 
-#pragma warning restore CA1031 // Do not catch general exception types

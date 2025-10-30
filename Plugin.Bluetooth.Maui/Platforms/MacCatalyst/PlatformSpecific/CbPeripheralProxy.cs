@@ -6,7 +6,6 @@ using Plugin.Bluetooth.Exceptions;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Proxy class for CoreBluetooth peripheral delegate callbacks.
@@ -327,4 +326,3 @@ public sealed partial class CbPeripheralProxy : CBPeripheralDelegate
 
     #endregion
 }
-#pragma warning restore CA1031 // Do not catch general exception types

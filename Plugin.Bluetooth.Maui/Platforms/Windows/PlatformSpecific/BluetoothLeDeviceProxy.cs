@@ -7,7 +7,6 @@ using Windows.Devices.Enumeration;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Proxy class for Windows Bluetooth LE device that provides event handling, lifecycle management,
@@ -197,4 +196,3 @@ public sealed partial class BluetoothLeDeviceProxy : IDisposable
     }
 }
 
-#pragma warning restore CA1031 // Do not catch general exception types

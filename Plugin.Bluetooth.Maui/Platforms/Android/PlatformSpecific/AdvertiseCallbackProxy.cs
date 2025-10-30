@@ -3,7 +3,6 @@ using Plugin.Bluetooth.Exceptions;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Android Bluetooth LE advertise callback proxy that handles advertising events.
@@ -57,4 +56,3 @@ public partial class AdvertiseCallbackProxy : AdvertiseCallback
     }
 }
 
-#pragma warning restore CA1031 // Do not catch general exception types

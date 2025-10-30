@@ -6,7 +6,6 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
 namespace Plugin.Bluetooth.PlatformSpecific;
 
-#pragma warning disable CA1031 // Do not catch general exception types
 
 /// <summary>
 /// Proxy class for Windows GATT session that provides event handling and lifecycle management
@@ -105,4 +104,3 @@ public sealed partial class GattSessionProxy : IDisposable
     }
 }
 
-#pragma warning restore CA1031 // Do not catch general exception types
