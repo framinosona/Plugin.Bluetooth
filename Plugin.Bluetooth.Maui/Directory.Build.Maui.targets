@@ -63,15 +63,13 @@
     <SupportedOSPlatformVersion Condition=" '$(IsForWindows)' == 'true' ">10.0.17763.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
-  <!-- ==================== MAUI : INCLUDE CORE FILES UNDER PLATFORMS\CORE ==================== -->
+  <!-- ==================== MAUI : INCLUDE CORE FILES UNDER CORE ==================== -->
   <!-- we do this because otherwise the IDE (Visual Studio / Rider) will not see those files -->
   <!-- and therefore will not be able to offer intellisense / compile them etc -->
-  <Target Name="IncludeCoreUnderPlatforms"
-    AfterTargets="ResolveMauiSingleProjectItems">
-    <ItemGroup Condition=" '$(IsForPlainNetX)' == 'true' ">
-      <Compile Include="Platforms\Core\**\*.cs" />
-    </ItemGroup>
-  </Target>
+
+  <ItemGroup Condition=" '$(IsForPlainNetX)' != 'true' ">
+    <Compile Remove="Core/**/*.cs" />
+  </ItemGroup>
 
   <!-- ==================== MAUI : Generate MACCATALYST from IOS SOURCE ==================== -->
   <!-- Author : Kyriakos Sidiropoulos (@ksidirop-laerdal) -->
