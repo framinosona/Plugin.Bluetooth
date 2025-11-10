@@ -1,33 +1,16 @@
-namespace Plugin.Bluetooth.Abstractions;
+namespace Plugin.Bluetooth.EventArgs;
 
-/// <summary>
-///     Event arguments for when the characteristic list changes during service exploration.
-/// </summary>
-public class CharacteristicListChangedEventArgs : EventArgs
+public class CharacteristicListChangedEventArgs : ItemListChangedEventArgs<IBluetoothCharacteristic>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="CharacteristicListChangedEventArgs"/> class.
-    /// </summary>
-    /// <param name="addedCharacteristics">The characteristics that were added.</param>
-    /// <param name="removedCharacteristics">The characteristics that were removed.</param>
-    public CharacteristicListChangedEventArgs(
-        IEnumerable<IBluetoothCharacteristic> addedCharacteristics,
-        IEnumerable<IBluetoothCharacteristic> removedCharacteristics)
+    public CharacteristicListChangedEventArgs(NotifyCollectionChangedEventArgs args) : base(args)
     {
-        ArgumentNullException.ThrowIfNull(addedCharacteristics);
-        ArgumentNullException.ThrowIfNull(removedCharacteristics);
-
-        AddedCharacteristics = addedCharacteristics;
-        RemovedCharacteristics = removedCharacteristics;
     }
 
-    /// <summary>
-    ///     Gets the characteristics that were added.
-    /// </summary>
-    public IEnumerable<IBluetoothCharacteristic> AddedCharacteristics { get; }
-
-    /// <summary>
-    ///     Gets the characteristics that were removed.
-    /// </summary>
-    public IEnumerable<IBluetoothCharacteristic> RemovedCharacteristics { get; }
+    public CharacteristicListChangedEventArgs(IEnumerable<IBluetoothCharacteristic>? addedItems, IEnumerable<IBluetoothCharacteristic>? removedItems) : base(addedItems, removedItems)
+    {
+    }
 }
+
+public class CharacteristicsAddedEventArgs(IEnumerable<IBluetoothCharacteristic> items) : ItemsChangedEventArgs<IBluetoothCharacteristic>(items);
+
+public class CharacteristicsRemovedEventArgs(IEnumerable<IBluetoothCharacteristic> items) : ItemsChangedEventArgs<IBluetoothCharacteristic>(items);

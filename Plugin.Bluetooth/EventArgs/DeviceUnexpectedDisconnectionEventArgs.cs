@@ -1,9 +1,9 @@
-namespace Plugin.Bluetooth.Abstractions;
+namespace Plugin.Bluetooth.EventArgs;
 
 /// <summary>
 ///     Event arguments for when a device unexpectedly disconnects.
 /// </summary>
-public class DeviceUnexpectedDisconnectionEventArgs : EventArgs
+public class DeviceUnexpectedDisconnectionEventArgs : System.EventArgs
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="DeviceUnexpectedDisconnectionEventArgs"/> class.

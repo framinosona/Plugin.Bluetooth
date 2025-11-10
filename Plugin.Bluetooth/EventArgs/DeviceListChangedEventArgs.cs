@@ -1,33 +1,16 @@
-namespace Plugin.Bluetooth.Abstractions;
+namespace Plugin.Bluetooth.EventArgs;
 
-/// <summary>
-///     Event arguments for when the device list changes during Bluetooth scanning.
-/// </summary>
-public class DeviceListChangedEventArgs : EventArgs
+public class DeviceListChangedEventArgs : ItemListChangedEventArgs<IBluetoothDevice>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="DeviceListChangedEventArgs"/> class.
-    /// </summary>
-    /// <param name="addedDevices">The devices that were added.</param>
-    /// <param name="removedDevices">The devices that were removed.</param>
-    public DeviceListChangedEventArgs(
-        IEnumerable<IBluetoothDevice> addedDevices,
-        IEnumerable<IBluetoothDevice> removedDevices)
+    public DeviceListChangedEventArgs(NotifyCollectionChangedEventArgs args) : base(args)
     {
-        ArgumentNullException.ThrowIfNull(addedDevices);
-        ArgumentNullException.ThrowIfNull(removedDevices);
-
-        AddedDevices = addedDevices;
-        RemovedDevices = removedDevices;
     }
 
-    /// <summary>
-    ///     Gets the devices that were added.
-    /// </summary>
-    public IEnumerable<IBluetoothDevice> AddedDevices { get; }
-
-    /// <summary>
-    ///     Gets the devices that were removed.
-    /// </summary>
-    public IEnumerable<IBluetoothDevice> RemovedDevices { get; }
+    public DeviceListChangedEventArgs(IEnumerable<IBluetoothDevice>? addedItems, IEnumerable<IBluetoothDevice>? removedItems) : base(addedItems, removedItems)
+    {
+    }
 }
+
+public class DevicesAddedEventArgs(IEnumerable<IBluetoothDevice> items) : ItemsChangedEventArgs<IBluetoothDevice>(items);
+
+public class DevicesRemovedEventArgs(IEnumerable<IBluetoothDevice> items) : ItemsChangedEventArgs<IBluetoothDevice>(items);

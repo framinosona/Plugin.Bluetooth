@@ -1,9 +1,9 @@
-namespace Plugin.Bluetooth.Abstractions;
+namespace Plugin.Bluetooth.EventArgs;
 
 /// <summary>
 ///     Event arguments for when an advertisement is received.
 /// </summary>
-public class AdvertisementReceivedEventArgs : EventArgs
+public class AdvertisementReceivedEventArgs : System.EventArgs
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="AdvertisementReceivedEventArgs"/> class.

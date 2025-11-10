@@ -1,9 +1,9 @@
-namespace Plugin.Bluetooth.Abstractions;
+namespace Plugin.Bluetooth.EventArgs;
 
 /// <summary>
 ///     Event arguments for when the Bluetooth state changes.
 /// </summary>
-public class BluetoothStateChangedEventArgs : EventArgs
+public class BluetoothStateChangedEventArgs : System.EventArgs
 {
     public BluetoothStateChangedEventArgs(bool isBluetoothOn)
     {
