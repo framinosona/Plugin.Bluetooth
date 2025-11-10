@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.Abstractions;
 
@@ -12,46 +12,6 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// </summary>
     IBluetoothDevice Device { get; }
 
-    #region Characteristics - Exploration
-
-    /// <summary>
-    /// Gets a value indicating whether the device is exploring services.
-    /// </summary>
-    bool IsExploringCharacteristics { get; }
-
-    /// <summary>
-    /// Occurs when the service list changes.
-    /// </summary>
-    event EventHandler<CharacteristicListChangedEventArgs>? CharacteristicListChanged;
-
-    /// <summary>
-    /// Explores the characteristics of the service asynchronously.
-    /// </summary>
-    /// <param name="clearBeforeExploring">True to clear the characteristics before exploring.</param>
-    /// <param name="timeout">The timeout for the operation.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
-    Task ExploreCharacteristicsAsync(bool clearBeforeExploring = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-
-    #endregion
-
-    #region Characteristics - Clear
-
-    /// <summary>
-    /// Clears the characteristics of the service.
-    /// </summary>
-    ValueTask ClearCharacteristicsAsync();
-
-    #endregion
-
-    /// <summary>
-    /// Returns the name of the service without the ID/GUID, useful for shortened logging.
-    /// </summary>
-    /// <returns>The short string representation of the service.</returns>
-    string ToShortString();
-
-    #region Service
-
     /// <summary>
     /// Gets the unique identifier of the service.
     /// </summary>
@@ -62,16 +22,50 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// </summary>
     string Name { get; }
 
-    #endregion
-
-    #region Characteristics - HasCharacteristic
+    #region Characteristics - Exploration
 
     /// <summary>
-    /// Checks if the service has a characteristic with the specified ID asynchronously.
+    /// Gets a value indicating whether the service is exploring characteristics.
     /// </summary>
-    /// <param name="id">The ID of the characteristic to check for.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the service has the characteristic.</returns>
-    ValueTask<bool> HasCharacteristicAsync(Guid id);
+    bool IsExploringCharacteristics { get; }
+
+    /// <summary>
+    /// Occurs when the characteristic list changes.
+    /// </summary>
+    event EventHandler<CharacteristicListChangedEventArgs>? CharacteristicListChanged;
+
+    /// <summary>
+    /// Event triggered when characteristics are added.
+    /// </summary>
+    event EventHandler<CharacteristicsAddedEventArgs>? CharacteristicsAdded;
+
+    /// <summary>
+    /// Event triggered when characteristics are removed.
+    /// </summary>
+    event EventHandler<CharacteristicsRemovedEventArgs>? CharacteristicsRemoved;
+
+    /// <summary>
+    /// Explores the characteristics of the service asynchronously.
+    /// </summary>
+    /// <param name="clearBeforeExploring">True to clear the characteristics before exploring.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task ExploreCharacteristicsAsync(bool clearBeforeExploring = false, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Characteristics - Clear
+
+    /// <summary>
+    /// Resets the list of characteristics and characteristics, and stops all subscriptions and notifications.
+    /// </summary>
+    ValueTask ClearCharacteristicsAsync();
+
+    #endregion
+
+    #region Characteristics - Has
 
     /// <summary>
     /// Checks if the service has a characteristic with the specified ID.
@@ -80,51 +74,118 @@ public partial interface IBluetoothService : INotifyPropertyChanged, IAsyncDispo
     /// <returns>True if the service has the characteristic, false otherwise.</returns>
     bool HasCharacteristic(Guid id);
 
-    #endregion
-
-    #region Characteristics - GetCharacteristic
-
     /// <summary>
-    /// Gets the characteristic with the specified ID asynchronously.
-    /// </summary>
-    /// <param name="id">The ID of the characteristic to get.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristic with the specified ID, or null if no such characteristic exists.</returns>
-    ValueTask<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Guid id);
-
-    /// <summary>
-    /// Gets the characteristic with the specified ID.
-    /// </summary>
-    /// <param name="id">The ID of the characteristic to get.</param>
-    /// <returns>The characteristic with the specified ID, or null if no such characteristic exists.</returns>
-    IBluetoothCharacteristic? GetCharacteristicOrDefault(Guid id);
-
-    /// <summary>
-    /// Gets the characteristic that matches the specified filter asynchronously.
+    /// Checks if the service has a characteristic with the specified ID.
     /// </summary>
     /// <param name="filter">The filter to apply to the characteristics.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristic that matches the filter, or null if no such characteristic exists.</returns>
-    ValueTask<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Func<IBluetoothCharacteristic, bool> filter);
+    /// <returns>True if the service has the characteristic, false otherwise.</returns>
+    bool HasCharacteristic(Func<IBluetoothCharacteristic, bool> filter);
+
+    /// <summary>
+    /// Checks if the service has a characteristic with the specified ID asynchronously.
+    /// Explore then bool
+    /// </summary>
+    /// <param name="id">The ID of the characteristic to check for.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the service has the characteristic.</returns>
+    ValueTask<bool> HasCharacteristicAsync(Guid id, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks if the service has a characteristic with the specified ID asynchronously.
+    /// Explore then bool
+    /// </summary>
+    /// <param name="filter">The filter to apply to the characteristics.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating whether the service has the characteristic.</returns>
+    ValueTask<bool> HasCharacteristicAsync(Func<IBluetoothCharacteristic, bool> filter, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Characteristics - Get
 
     /// <summary>
     /// Gets the characteristic that matches the specified filter.
+    /// 0-1
     /// </summary>
     /// <param name="filter">The filter to apply to the characteristics.</param>
     /// <returns>The characteristic that matches the filter, or null if no such characteristic exists.</returns>
+    /// <exception cref="MultipleCharacteristicsFoundException">If more than 1 result exists.</exception>
     IBluetoothCharacteristic? GetCharacteristicOrDefault(Func<IBluetoothCharacteristic, bool> filter);
 
     /// <summary>
-    /// Gets the characteristics that match the specified filter asynchronously.
+    /// Gets the characteristic with the specified ID.
+    /// 0-1
     /// </summary>
-    /// <param name="filter">The filter to apply to the characteristics. If null, returns all characteristics.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristics that match the filter, or all characteristics if the filter is null.</returns>
-    ValueTask<IEnumerable<IBluetoothCharacteristic>> GetCharacteristicsAsync(Func<IBluetoothCharacteristic, bool>? filter = null);
+    /// <param name="id">The ID of the characteristic to get.</param>
+    /// <returns>The characteristic with the specified ID, or null if no such characteristic exists.</returns>
+    /// <exception cref="MultipleCharacteristicsFoundException">If more than 1 result exists.</exception>
+    IBluetoothCharacteristic? GetCharacteristicOrDefault(Guid id);
 
     /// <summary>
     /// Gets the characteristics that match the specified filter.
+    /// 0-N
     /// </summary>
-    /// <param name="filter">The filter to apply to the characteristics. If null, returns all characteristics.</param>
+    /// <param name="filter">The filter to apply to the characteristics.</param>
     /// <returns>The characteristics that match the filter, or all characteristics if the filter is null.</returns>
     IEnumerable<IBluetoothCharacteristic> GetCharacteristics(Func<IBluetoothCharacteristic, bool>? filter = null);
+
+    /// <summary>
+    /// Gets the characteristics with the specified ID.
+    /// 0-N
+    /// </summary>
+    /// <param name="id">The ID of the characteristics to get.</param>
+    /// <returns>The characteristics with the specified ID.</returns>
+    IEnumerable<IBluetoothCharacteristic> GetCharacteristics(Guid id);
+
+    /// <summary>
+    /// Gets the characteristic that matches the specified filter asynchronously.
+    /// Explore then 0-1
+    /// </summary>
+    /// <param name="filter">The filter to apply to the characteristics.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristic that matches the filter, or null if no such characteristic exists.</returns>
+    /// <exception cref="MultipleCharacteristicsFoundException">If more than 1 result exists.</exception>
+    ValueTask<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Func<IBluetoothCharacteristic, bool> filter, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the characteristic with the specified ID asynchronously.
+    /// Explore then 0-1
+    /// </summary>
+    /// <param name="id">The ID of the characteristic to get.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristic with the specified ID, or null if no such characteristic exists.</returns>
+    /// <exception cref="MultipleCharacteristicsFoundException">If more than 1 result exists.</exception>
+    ValueTask<IBluetoothCharacteristic?> GetCharacteristicOrDefaultAsync(Guid id, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the characteristics that match the specified filter asynchronously.
+    /// Explore then 0-N
+    /// </summary>
+    /// <param name="filter">The filter to apply to the characteristics.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristics that match the filter, or all characteristics if the filter is null.</returns>
+    ValueTask<IEnumerable<IBluetoothCharacteristic>> GetCharacteristicsAsync(Func<IBluetoothCharacteristic, bool>? filter = null, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the characteristics with the specified ID asynchronously.
+    /// Explore then 0-N
+    /// </summary>
+    /// <param name="id">The ID of the characteristics to get.</param>
+    /// <param name="nativeOptions">Native platform-specific options for this operation.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the characteristics with the specified ID.</returns>
+    ValueTask<IEnumerable<IBluetoothCharacteristic>> GetCharacteristicsAsync(Guid id, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 }

@@ -1,7 +1,8 @@
-using Plugin.Bluetooth.Enums;
-
 namespace Plugin.Bluetooth.Abstractions;
 
+/// <summary>
+/// Interface representing a Bluetooth advertisement, providing properties for accessing advertisement data received from a Bluetooth device.
+/// </summary>
 public interface IBluetoothAdvertisement
 {
     /// <summary>
@@ -74,7 +75,7 @@ public interface IBluetoothAdvertisement
     ///     particular property
     ///     these libs' maintainers can't and won't provide any guarantees in terms of compatibility.
     /// </summary>
-    ReadOnlySpan<byte> ManufacturerData { get; }
+    ReadOnlyMemory<byte> ManufacturerData { get; }
 
     /// <summary>
     ///     Gets the Primary Manufacturer based on the "Manufacturer Data" sectors in BLE "Advertising-Messages" and BLE

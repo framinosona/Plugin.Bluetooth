@@ -1,7 +1,9 @@
+using Plugin.Bluetooth.EventArgs;
+
 namespace Plugin.Bluetooth.Abstractions;
 
 /// <summary>
-/// Interface for managing and scanning Bluetooth devices, extending <see cref="IBluetoothManager" />.
+/// Interface for managing and scanning Bluetooth devices, extending <see cref="IBluetoothActivity" />.
 /// </summary>
 public partial interface IBluetoothScanner : IBluetoothActivity
 {
@@ -20,12 +22,7 @@ public partial interface IBluetoothScanner : IBluetoothActivity
     /// <summary>
     /// Advertisement filter. If set, only advertisements that pass the filter will be processed.
     /// </summary>
-    Func<IBluetoothAdvertisement, bool>? AdvertisementFilter { get; set; }
-
-    /// <summary>
-    /// Resets the advertisement filter.
-    /// </summary>
-    void ResetAdvertisementFilter();
+    Func<IBluetoothAdvertisement, bool> AdvertisementFilter { get; set; }
 
     #endregion
 
@@ -60,34 +57,26 @@ public partial interface IBluetoothScanner : IBluetoothActivity
 
     #endregion
 
-    #region DeviceList
+    #region Devices - Exploration
 
     /// <summary>
     /// Event triggered when the list of available devices changes.
     /// </summary>
-    event EventHandler<DeviceListChangedEventArgs> DeviceListChanged;
+    event EventHandler<DeviceListChangedEventArgs>? DeviceListChanged;
 
     /// <summary>
-    /// Waits for a Bluetooth device with the specified ID to appear or returns it if already available.
+    /// Event triggered when devices are added.
     /// </summary>
-    /// <param name="id">The ID of the device to wait for.</param>
-    /// <param name="timeout">Optional timeout. Defaults to null for no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>The <see cref="IBluetoothDevice" /> when it appears.</returns>
-    Task<IBluetoothDevice> WaitForDeviceToAppearAsync(string id, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+    event EventHandler<DevicesAddedEventArgs>? DevicesAdded;
 
     /// <summary>
-    /// Waits for the first Bluetooth device that matches the specified filter to appear.
+    /// Event triggered when devices are removed.
     /// </summary>
-    /// <param name="filter">A function to filter devices. Should return true for matching devices.</param>
-    /// <param name="timeout">Optional timeout. Defaults to null for no timeout.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>The <see cref="IBluetoothDevice" /> that matches the filter when it appears.</returns>
-    Task<IBluetoothDevice> WaitForDeviceToAppearAsync(Func<IBluetoothDevice, bool> filter, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+    event EventHandler<DevicesRemovedEventArgs>? DevicesRemoved;
 
     #endregion
 
-    #region GetDevice
+    #region Devices - Get
 
     /// <summary>
     /// Returns the closest Bluetooth device currently available.
@@ -116,5 +105,42 @@ public partial interface IBluetoothScanner : IBluetoothActivity
     /// <returns>A collection of <see cref="IBluetoothDevice" /> that match the filter.</returns>
     IEnumerable<IBluetoothDevice> GetDevices(Func<IBluetoothDevice, bool>? filter = null);
 
+    /// <summary>
+    /// Gets a Bluetooth device that matches the specified filter or waits for it to appear if not already available.
+    /// </summary>
+    /// <param name="filter">An optional function to filter devices. Defaults to null for all devices.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>The <see cref="IBluetoothDevice" /> when it appears.</returns>
+    ValueTask<IBluetoothDevice> GetDeviceOrWaitForDeviceToAppearAsync(Func<IBluetoothDevice, bool>? filter = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a Bluetooth device with the specified ID or waits for it to appear if not already available.
+    /// </summary>
+    /// <param name="id">The ID of the device to retrieve.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>The <see cref="IBluetoothDevice" /> when it appears.</returns>
+    ValueTask<IBluetoothDevice> GetDeviceOrWaitForDeviceToAppearAsync(string id, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Waits for a Bluetooth device with the specified ID to appear or returns it if already available.
+    /// </summary>
+    /// <param name="id">The ID of the device to wait for.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>The <see cref="IBluetoothDevice" /> when it appears.</returns>
+    ValueTask<IBluetoothDevice> WaitForDeviceToAppearAsync(string id, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Waits for the first Bluetooth device that matches the specified filter to appear.
+    /// </summary>
+    /// <param name="filter">A function to filter devices. Should return true for matching devices.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
+    /// <returns>The <see cref="IBluetoothDevice" /> that matches the filter when it appears.</returns>
+    ValueTask<IBluetoothDevice> WaitForDeviceToAppearAsync(Func<IBluetoothDevice, bool>? filter = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+
     #endregion
+
 }

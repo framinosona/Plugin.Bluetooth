@@ -1,8 +1,8 @@
 namespace Plugin.Bluetooth.Abstractions;
 /// <summary>
-/// Interface for managing Bluetooth broadcasting operations, extending <see cref="IBluetoothManager" />.
+/// Interface for managing Bluetooth broadcasting operations, extending <see cref="IBluetoothActivity" />.
 /// </summary>
-public interface IBluetoothBroadcaster : IBluetoothActivity
+public partial interface IBluetoothBroadcaster : IBluetoothActivity
 {
     /// <summary>
     /// Sets the advertising data asynchronously.
@@ -14,5 +14,5 @@ public interface IBluetoothBroadcaster : IBluetoothActivity
     /// - iOS: CoreBluetooth.StartAdvertisingOptions.ServicesUUID
     /// - Windows: BluetoothLEAdvertisementData.ServiceUuids
     /// </remarks>
-    Task SetAdvertisingDataAsync(IEnumerable<Guid> serviceGuids);
+    Task NativeSetAdvertisingDataAsync(IEnumerable<Guid> serviceGuids);
 }

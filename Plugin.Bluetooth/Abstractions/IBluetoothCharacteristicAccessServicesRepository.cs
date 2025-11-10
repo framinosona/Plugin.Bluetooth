@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace Plugin.Bluetooth.Abstractions;
 
 /// <summary>
@@ -15,8 +13,10 @@ public interface IBluetoothCharacteristicAccessServicesRepository
     /// <summary>
     /// Asynchronously adds all service definitions found in the current assembly.
     /// </summary>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    ValueTask AddAllServiceDefinitionsInCurrentAssemblyAsync();
+    ValueTask AddAllServiceDefinitionsInCurrentAssemblyAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Adds all service definitions found in the specified assembly by name.
@@ -28,8 +28,10 @@ public interface IBluetoothCharacteristicAccessServicesRepository
     /// Asynchronously adds all service definitions found in the specified assembly by name.
     /// </summary>
     /// <param name="assemblyName">The name of the assembly.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    ValueTask AddAllServiceDefinitionsInAssemblyAsync(string assemblyName);
+    ValueTask AddAllServiceDefinitionsInAssemblyAsync(string assemblyName, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Adds all service definitions found in the specified assembly.
@@ -41,8 +43,10 @@ public interface IBluetoothCharacteristicAccessServicesRepository
     /// Asynchronously adds all service definitions found in the specified assembly.
     /// </summary>
     /// <param name="assembly">The assembly.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    ValueTask AddAllServiceDefinitionsInAssemblyAsync(Assembly assembly);
+    ValueTask AddAllServiceDefinitionsInAssemblyAsync(Assembly assembly, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Adds a known service name to the repository.

@@ -9,5 +9,5 @@ public interface IBluetoothCharacteristicObjectReadable
     /// Converts a byte array to the object.
     /// </summary>
     /// <param name="byteArray">The byte array to convert.</param>
-    void FromByteArray(ReadOnlySpan<byte> byteArray);
+    void FromByteArray(ReadOnlyMemory<byte> byteArray);
 }
