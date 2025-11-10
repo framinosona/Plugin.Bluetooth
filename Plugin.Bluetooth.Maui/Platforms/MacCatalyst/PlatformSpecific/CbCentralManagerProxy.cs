@@ -1,13 +1,4 @@
-using System;
-
-using CoreBluetooth;
-using CoreFoundation;
-using Foundation;
-
-using Plugin.Bluetooth;
-using Plugin.Bluetooth.Exceptions;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>
@@ -22,9 +13,11 @@ public partial class CbCentralManagerProxy : CBCentralManagerDelegate
     /// <param name="cbCentralManagerProxyDelegate">The delegate to handle central manager proxy callbacks.</param>
     /// <param name="options">The initialization options for the central manager.</param>
     /// <param name="dispatchQueue">The dispatch queue for CoreBluetooth operations. If null, uses the main queue.</param>
-    public CbCentralManagerProxy(CbCentralManagerProxy.ICbCentralManagerProxyDelegate cbCentralManagerProxyDelegate, CBCentralInitOptions options, DispatchQueue? dispatchQueue = null)
+    public CbCentralManagerProxy(ICbCentralManagerProxyDelegate cbCentralManagerProxyDelegate, CBCentralInitOptions? options = null, DispatchQueue? dispatchQueue = null)
     {
         CbCentralManagerProxyDelegate = cbCentralManagerProxyDelegate;
+        dispatchQueue ??= DispatchQueue.DefaultGlobalQueue;
+        options ??= new CBCentralInitOptions();
         CbCentralManager = new CBCentralManager(this, dispatchQueue, options)
         {
             Delegate = this
@@ -34,7 +27,7 @@ public partial class CbCentralManagerProxy : CBCentralManagerDelegate
     /// <summary>
     /// Gets the delegate that handles central manager proxy callbacks.
     /// </summary>
-    public CbCentralManagerProxy.ICbCentralManagerProxyDelegate CbCentralManagerProxyDelegate { get; }
+    public ICbCentralManagerProxyDelegate CbCentralManagerProxyDelegate { get; }
 
     /// <summary>
     /// Gets the underlying CoreBluetooth central manager.

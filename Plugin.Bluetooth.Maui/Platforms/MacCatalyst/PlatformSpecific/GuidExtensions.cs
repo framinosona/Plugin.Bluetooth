@@ -1,11 +1,6 @@
-using System;
-
-using CoreBluetooth;
-using Foundation;
-
 using Plugin.Bluetooth.BluetoothSigSpecific;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for converting between System.Guid and iOS CoreBluetooth UUID types.

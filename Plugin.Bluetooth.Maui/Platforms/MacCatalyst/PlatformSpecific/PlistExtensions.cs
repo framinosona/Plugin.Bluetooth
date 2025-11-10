@@ -1,8 +1,4 @@
-using System;
-
-using Foundation;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for working with iOS Info.plist file entries and background modes.

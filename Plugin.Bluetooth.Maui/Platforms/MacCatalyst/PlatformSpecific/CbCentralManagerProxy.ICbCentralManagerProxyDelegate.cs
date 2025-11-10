@@ -1,9 +1,4 @@
-using System;
-
-using CoreBluetooth;
-using Foundation;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 // Mapping native APIs leads to unclean interfaces, ignoring warnings here
 #pragma warning disable CA1034 // Nested types should not be visible
@@ -15,7 +10,7 @@ public partial class CbCentralManagerProxy
     /// <summary>
     /// Delegate interface for CoreBluetooth central manager callbacks, extending the base Bluetooth scanner interface.
     /// </summary>
-    public interface ICbCentralManagerProxyDelegate : Abstractions.IBluetoothScanner
+    public interface ICbCentralManagerProxyDelegate
     {
         /// <summary>
         /// Called when a peripheral is discovered during scanning.
@@ -41,7 +36,7 @@ public partial class CbCentralManagerProxy
         /// </summary>
         /// <param name="peripheral">The CoreBluetooth peripheral to get the device delegate for.</param>
         /// <returns>The device delegate for the specified peripheral.</returns>
-        CbCentralManagerProxy.ICbPeripheralDelegate GetDevice(CBPeripheral peripheral);
+        ICbPeripheralDelegate GetDevice(CBPeripheral peripheral);
     }
 }
 
