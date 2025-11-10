@@ -1,6 +1,3 @@
-using Plugin.Bluetooth.Abstractions;
-using Plugin.Bluetooth.Exceptions;
-
 namespace Plugin.Bluetooth.CharacteristicAccess;
 
 public abstract partial class CharacteristicAccessService<TRead, TWrite>
@@ -26,7 +23,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
     }
 
     /// <inheritdoc />
-    public async Task WriteAsync(IBluetoothDevice device, TWrite value, bool skipIfOldValueMatchesNewValue = false, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+    public async Task WriteAsync(IBluetoothDevice device, TWrite value, bool skipIfOldValueMatchesNewValue = false, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(device, nameof(device));
 
@@ -35,6 +32,6 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
         {
             throw new CharacteristicWriteException(characteristic, message: "Characteristic does not support writing");
         }
-        await characteristic.WriteValueAsync(ToBytes(value), skipIfOldValueMatchesNewValue, timeout, cancellationToken).ConfigureAwait(false);
+        await characteristic.WriteValueAsync(ToBytes(value), skipIfOldValueMatchesNewValue, nativeOptions, timeout, cancellationToken).ConfigureAwait(false);
     }
 }

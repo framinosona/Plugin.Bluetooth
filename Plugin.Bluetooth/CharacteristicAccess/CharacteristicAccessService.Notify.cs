@@ -1,12 +1,10 @@
-using Plugin.Bluetooth.Abstractions;
-
-using System.ComponentModel;
+using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.CharacteristicAccess;
 
 public abstract partial class CharacteristicAccessService<TRead, TWrite>
 {
-    private readonly object _listenersLock = new object();
+    private readonly Lock _listenersLock = new Lock();
 
     private readonly List<(IBluetoothCharacteristic, IBluetoothCharacteristicAccessService<TRead, TWrite>.OnNotificationReceived)> _listeners = [];
 
@@ -177,7 +175,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
             return; // No listeners to notify
         }
 
-        var obj = FromBytes(characteristic.Value.Span);
+        var obj = FromBytes(characteristic.Value);
         foreach (var listener in allListeners)
         {
             listener.Invoke(obj);
@@ -189,7 +187,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
     /// <summary>
     /// Gets a value indicating whether this instance has been disposed.
     /// </summary>
-    protected bool IsDisposed { get; private set; }
+    private bool IsDisposed { get; set; }
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -210,7 +208,7 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite>
         {
             if (disposing)
             {
-                _subscriptionSemaphoreSlim?.Dispose();
+                _subscriptionSemaphoreSlim.Dispose();
             }
 
             IsDisposed = true;

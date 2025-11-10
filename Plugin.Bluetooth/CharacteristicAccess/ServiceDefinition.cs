@@ -1,7 +1,4 @@
 
-using System.Reflection;
-using Plugin.BaseTypeExtensions;
-
 namespace Plugin.Bluetooth.CharacteristicAccess;
 
 /// <summary>
@@ -46,11 +43,13 @@ public sealed class ServiceDefinitionAttribute : Attribute
     /// Asynchronously finds all classes with the ServiceDefinition attribute in the specified assembly.
     /// </summary>
     /// <param name="assembly">The assembly to search in.</param>
+    /// <param name="timeout">The timeout for this operation</param>
+    /// <param name="cancellationToken">A cancellation token to cancel this operation.</param>
     /// <returns>A task representing the asynchronous operation, containing a list of tuples with the ServiceDefinitionAttribute and the associated Type.</returns>
-    public static Task<List<(ServiceDefinitionAttribute, Type)>> GetAllServiceDefinitionsInAssemblyOfAsync(Assembly assembly)
+    public static Task<List<(ServiceDefinitionAttribute, Type)>> GetAllServiceDefinitionsInAssemblyOfAsync(Assembly assembly, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         // Find all classes with the ServiceDefinition attribute
         // It returns the type of the class and the attribute
-        return assembly.GetTypesWithAttributeAsync<ServiceDefinitionAttribute>();
+        return assembly.GetTypesWithAttributeAsync<ServiceDefinitionAttribute>().WaitBetterAsync(timeout, cancellationToken);
     }
 }

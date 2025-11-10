@@ -1,7 +1,3 @@
-using Plugin.Bluetooth.Abstractions;
-
-using System.Reflection;
-
 namespace Plugin.Bluetooth.CharacteristicAccess;
 
 /// <summary>
@@ -28,9 +24,9 @@ public class CharacteristicAccessServicesRepository : BaseBindableObject, IBluet
     }
 
     /// <inheritdoc />
-    public ValueTask AddAllServiceDefinitionsInCurrentAssemblyAsync()
+    public ValueTask AddAllServiceDefinitionsInCurrentAssemblyAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
-        return AddAllServiceDefinitionsInAssemblyAsync(Assembly.GetCallingAssembly());
+        return AddAllServiceDefinitionsInAssemblyAsync(Assembly.GetCallingAssembly(), timeout, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -40,9 +36,9 @@ public class CharacteristicAccessServicesRepository : BaseBindableObject, IBluet
     }
 
     /// <inheritdoc />
-    public ValueTask AddAllServiceDefinitionsInAssemblyAsync(string assemblyName)
+    public ValueTask AddAllServiceDefinitionsInAssemblyAsync(string assemblyName, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
-        return AddAllServiceDefinitionsInAssemblyAsync(GetAssemblyFromName(assemblyName));
+        return AddAllServiceDefinitionsInAssemblyAsync(GetAssemblyFromName(assemblyName), timeout, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -59,11 +55,11 @@ public class CharacteristicAccessServicesRepository : BaseBindableObject, IBluet
     }
 
     /// <inheritdoc />
-    public async ValueTask AddAllServiceDefinitionsInAssemblyAsync(Assembly assembly)
+    public async ValueTask AddAllServiceDefinitionsInAssemblyAsync(Assembly assembly, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         // Find all classes with the ServiceDefinition attribute
         // It returns the type of the class and the attribute
-        var serviceDefinitions = await ServiceDefinitionAttribute.GetAllServiceDefinitionsInAssemblyOfAsync(assembly).ConfigureAwait(false);
+        var serviceDefinitions = await ServiceDefinitionAttribute.GetAllServiceDefinitionsInAssemblyOfAsync(assembly, timeout, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         foreach ((var serviceDefinition, var serviceType) in serviceDefinitions)
         {

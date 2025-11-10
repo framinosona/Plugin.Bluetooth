@@ -1,6 +1,3 @@
-using Plugin.Bluetooth.Abstractions;
-using Plugin.Bluetooth.Exceptions;
-
 namespace Plugin.Bluetooth.CharacteristicAccess;
 
 /// <summary>
@@ -153,12 +150,12 @@ public abstract partial class CharacteristicAccessService<TRead, TWrite> : Chara
     /// </summary>
     /// <param name="input">The input value to convert.</param>
     /// <returns>A read-only span of bytes representing the input value.</returns>
-    protected abstract ReadOnlySpan<byte> ToBytes(TWrite input);
+    protected abstract ReadOnlyMemory<byte> ToBytes(TWrite input);
 
     /// <summary>
     /// Converts a byte array from the characteristic to the output type.
     /// </summary>
     /// <param name="value">The byte array to convert.</param>
     /// <returns>The converted value of type TRead.</returns>
-    protected abstract TRead FromBytes(ReadOnlySpan<byte> value);
+    protected abstract TRead FromBytes(ReadOnlyMemory<byte> value);
 }

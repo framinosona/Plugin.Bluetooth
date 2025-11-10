@@ -13,7 +13,7 @@ internal sealed class CharacteristicAccessServiceForSimpleTypes<T> : Characteris
     /// <param name="name">The name of the characteristic.</param>
     /// <param name="toBytesConversion">Function to convert from T to bytes.</param>
     /// <param name="fromBytesConversion">Function to convert from bytes to T.</param>
-    public CharacteristicAccessServiceForSimpleTypes(Guid characteristicId, string name, Func<T, ReadOnlySpan<byte>> toBytesConversion, Func<ReadOnlySpan<byte>, T> fromBytesConversion) : base(characteristicId, name)
+    public CharacteristicAccessServiceForSimpleTypes(Guid characteristicId, string name, Func<T, ReadOnlyMemory<byte>> toBytesConversion, Func<ReadOnlyMemory<byte>, T> fromBytesConversion) : base(characteristicId, name)
     {
         ToBytesConversion = toBytesConversion;
         FromBytesConversion = fromBytesConversion;
@@ -22,21 +22,21 @@ internal sealed class CharacteristicAccessServiceForSimpleTypes<T> : Characteris
     /// <summary>
     /// Gets the function used to convert from T to bytes.
     /// </summary>
-    private Func<T, ReadOnlySpan<byte>> ToBytesConversion { get; }
+    private Func<T, ReadOnlyMemory<byte>> ToBytesConversion { get; }
 
     /// <summary>
     /// Gets the function used to convert from bytes to T.
     /// </summary>
-    private Func<ReadOnlySpan<byte>, T> FromBytesConversion { get; }
+    private Func<ReadOnlyMemory<byte>, T> FromBytesConversion { get; }
 
     /// <inheritdoc />
-    protected override ReadOnlySpan<byte> ToBytes(T input)
+    protected override ReadOnlyMemory<byte> ToBytes(T input)
     {
         return ToBytesConversion(input);
     }
 
     /// <inheritdoc />
-    protected override T FromBytes(ReadOnlySpan<byte> value)
+    protected override T FromBytes(ReadOnlyMemory<byte> value)
     {
         return FromBytesConversion(value);
     }

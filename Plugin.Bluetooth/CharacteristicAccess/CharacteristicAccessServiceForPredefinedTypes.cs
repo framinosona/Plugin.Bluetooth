@@ -1,5 +1,3 @@
-using Plugin.Bluetooth.Abstractions;
-
 namespace Plugin.Bluetooth.CharacteristicAccess;
 
 /// <summary>
@@ -20,7 +18,7 @@ public class CharacteristicAccessServiceForPredefinedTypes<TRead, TWrite> : Char
     }
 
     /// <inheritdoc />
-    protected override ReadOnlySpan<byte> ToBytes(TWrite input)
+    protected override ReadOnlyMemory<byte> ToBytes(TWrite input)
     {
         try
         {
@@ -34,7 +32,7 @@ public class CharacteristicAccessServiceForPredefinedTypes<TRead, TWrite> : Char
     }
 
     /// <inheritdoc />
-    protected override TRead FromBytes(ReadOnlySpan<byte> value)
+    protected override TRead FromBytes(ReadOnlyMemory<byte> value)
     {
         var output = new TRead();
         try
