@@ -75,6 +75,12 @@ dotnet_style_coalesce_expression = false
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = none
 
+# IDE0032: Use auto property
+dotnet_style_prefer_auto_properties = false
+
+# CA1721: Property names should not match get methods
+dotnet_diagnostic.CA1721.severity = none
+
 [*.xml]
 max_line_length = 0
 indent_style = space
