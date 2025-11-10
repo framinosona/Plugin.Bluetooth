@@ -1,5 +1,3 @@
-using Plugin.ExceptionListeners;
-
 namespace Plugin.Bluetooth.Exceptions;
 
 public class BluetoothUnhandledExceptionListener : ExceptionListener

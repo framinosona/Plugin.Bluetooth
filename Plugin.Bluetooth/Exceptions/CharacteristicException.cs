@@ -1,7 +1,3 @@
-using System.Collections.ObjectModel;
-
-using Plugin.Bluetooth.Abstractions;
-
 namespace Plugin.Bluetooth.Exceptions;
 
 /// <summary>

@@ -1,5 +1,3 @@
-using Plugin.Bluetooth.Abstractions;
-
 namespace Plugin.Bluetooth.Exceptions;
 
 /// <summary>

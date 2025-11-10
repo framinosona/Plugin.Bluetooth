@@ -1,5 +1,3 @@
-using Plugin.Bluetooth.Abstractions;
-
 namespace Plugin.Bluetooth.Exceptions;
 
 /// <summary>
@@ -354,5 +352,65 @@ public class ActivityUnexpectedStopException : ActivityException
         Exception? innerException = null)
         : base(activity, message, innerException)
     {
+    }
+}
+
+/// <summary>
+///     Represents an exception that occurs when Bluetooth is turned off.
+/// </summary>
+/// <seealso cref="ActivityException" />
+public class BluetoothIsOffException : ActivityException
+{
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BluetoothIsOffException"/> class.
+    /// </summary>
+    public BluetoothIsOffException()
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BluetoothIsOffException"/> class with a specified error message.
+    /// </summary>
+    /// <param name="message">The message that describes the error.</param>
+    public BluetoothIsOffException(string message) : base(message)
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BluetoothIsOffException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+    /// </summary>
+    /// <param name="message">The error message that explains the reason for the exception.</param>
+    /// <param name="innerException">The exception that is the cause of the current exception.</param>
+    public BluetoothIsOffException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="BluetoothIsOffException"/> class.
+    /// </summary>
+    /// <param name="activity">The Bluetooth activity associated with the exception.</param>
+    /// <param name="message">A message that describes the error.</param>
+    /// <param name="innerException">The inner exception that caused the current exception, if any.</param>
+    public BluetoothIsOffException(
+        IBluetoothActivity activity,
+        string message = "Bluetooth is off",
+        Exception? innerException = null)
+        : base(activity, message, innerException)
+    {
+    }
+
+    /// <summary>
+    ///     Throws a <see cref="BluetoothIsOffException"/> if Bluetooth is turned off.
+    /// </summary>
+    /// <param name="activity">The Bluetooth activity to check.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="activity"/> is null.</exception>
+    /// <exception cref="BluetoothIsOffException">Thrown when Bluetooth is turned off.</exception>
+    public static void ThrowIfBluetoothIsOff(IBluetoothActivity activity)
+    {
+        ArgumentNullException.ThrowIfNull(activity);
+        if (!activity.IsBluetoothOn)
+        {
+            throw new BluetoothIsOffException(activity);
+        }
     }
 }
