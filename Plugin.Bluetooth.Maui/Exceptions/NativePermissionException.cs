@@ -1,5 +1,3 @@
-using Plugin.Bluetooth.Exceptions;
-
 namespace Plugin.Bluetooth.Maui.Exceptions;
 
 /// <summary>
