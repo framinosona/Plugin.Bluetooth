@@ -150,13 +150,11 @@
   <!-- ==================== ARCHIVED FILES ======================= -->
   <ItemGroup>
     <Compile Remove="**/Archive/**/*.*" />
-    <None Include="**/Archive/**/*.*" Pack="false" />
   </ItemGroup>
 
   <!-- ==================== DOCUMENTATION ======================= -->
   <ItemGroup>
     <Compile Remove="**/Documentation/**/*.*" />
-    <None Include="**/Documentation/**/*.*" Pack="false" />
   </ItemGroup>
 
   <!-- ==================== MAUI INTEGRATION ==================== -->
