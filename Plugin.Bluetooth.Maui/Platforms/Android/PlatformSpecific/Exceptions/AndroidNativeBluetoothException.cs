@@ -1,6 +1,4 @@
-using Plugin.Bluetooth.Exceptions;
-
-namespace Plugin.Bluetooth.PlatformSpecific.Exceptions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Exceptions;
 
 /// <summary>
 /// Represents an exception that occurs in Android-specific native Bluetooth operations.

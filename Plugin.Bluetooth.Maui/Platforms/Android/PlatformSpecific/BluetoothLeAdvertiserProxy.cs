@@ -1,6 +1,4 @@
-using Android.Bluetooth.LE;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Provides a thread-safe proxy for accessing the Android Bluetooth LE advertiser.
@@ -8,7 +6,8 @@ namespace Plugin.Bluetooth.PlatformSpecific;
 /// </summary>
 public static class BluetoothLeAdvertiserProxy
 {
-    private static readonly Lazy<BluetoothLeAdvertiser> _lazyBluetoothLeAdvertiser = new(() => BluetoothAdapterProxy.BluetoothAdapter.BluetoothLeAdvertiser ?? throw new InvalidOperationException("BluetoothAdapter.BluetoothLeAdvertiser is not available"));
+    private readonly static Lazy<BluetoothLeAdvertiser> _lazyBluetoothLeAdvertiser =
+        new Lazy<BluetoothLeAdvertiser>(() => BluetoothAdapterProxy.BluetoothAdapter.BluetoothLeAdvertiser ?? throw new InvalidOperationException("BluetoothAdapter.BluetoothLeAdvertiser is not available"));
 
     /// <summary>
     /// Gets the Bluetooth LE advertiser instance.

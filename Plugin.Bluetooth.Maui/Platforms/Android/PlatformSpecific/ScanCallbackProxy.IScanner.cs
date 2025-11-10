@@ -1,6 +1,4 @@
-using Android.Bluetooth.LE;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 #pragma warning disable CA1034 // Nested types should not be visible
 

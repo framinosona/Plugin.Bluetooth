@@ -1,9 +1,6 @@
-using Android.Bluetooth;
-using Android.Bluetooth.LE;
-using Plugin.Bluetooth.Exceptions;
+using Exception = System.Exception;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
-
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Android Bluetooth GATT server callback proxy that handles GATT server events.

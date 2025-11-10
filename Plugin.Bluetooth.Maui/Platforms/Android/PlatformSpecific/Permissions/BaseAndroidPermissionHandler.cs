@@ -1,11 +1,9 @@
-using Plugin.Bluetooth.BaseObjects;
-
-namespace Plugin.Bluetooth.PlatformSpecific.Permissions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Permissions;
 
 /// <summary>
 /// Base class for Android-specific permission handling.
 /// </summary>
-public abstract class BaseAndroidPermissionHandler : BasePermissionHandler
+public abstract class BaseAndroidPermissionHandler : Microsoft.Maui.ApplicationModel.Permissions.BasePlatformPermission
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseAndroidPermissionHandler"/> class.
@@ -29,7 +27,7 @@ public abstract class BaseAndroidPermissionHandler : BasePermissionHandler
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="PermissionException"></exception>
-    public async override Task RequestIfNeededAsync()
+    public async Task RequestIfNeededAsync()
     {
         if (await CheckStatusAsync().ConfigureAwait(false) == PermissionStatus.Granted)
         {

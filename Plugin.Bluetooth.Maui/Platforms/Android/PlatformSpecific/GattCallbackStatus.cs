@@ -1,6 +1,6 @@
 // ReSharper disable InconsistentNaming
 #pragma warning disable CA1707 // Identifiers should not contain underscores
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 public enum GattCallbackStatus
 {

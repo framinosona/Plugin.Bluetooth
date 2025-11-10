@@ -1,7 +1,6 @@
-using Android.Bluetooth;
-using Android.Content;
+using ScanMode = Android.Bluetooth.ScanMode;
 
-namespace Plugin.Bluetooth.PlatformSpecific.BroadcastReceivers;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.BroadcastReceivers;
 
 /// <summary>
 /// Broadcast receiver for handling Bluetooth adapter events such as state changes,
@@ -111,55 +110,55 @@ public partial class BluetoothAdapterEventsReceiver : BaseNativeEventReceiver
         ArgumentNullException.ThrowIfNull(intent);
         switch (intent.Action)
         {
-            case BluetoothAdapter.ActionScanModeChanged:
+            case Android.Bluetooth.BluetoothAdapter.ActionScanModeChanged:
                 // Scan mode changed (e.g., from none to connectable or discoverable)
-                var scanMode = (ScanMode)intent.GetIntExtra(BluetoothAdapter.ExtraScanMode, -1);
-                var previousScanMode = (ScanMode)intent.GetIntExtra(BluetoothAdapter.ExtraPreviousScanMode, -1);
+                var scanMode = (ScanMode)intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraScanMode, -1);
+                var previousScanMode = (ScanMode)intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraPreviousScanMode, -1);
 
                 OnScanModeChanged(new ScanModeChangedEventArgs(scanMode, previousScanMode));
                 break;
 
-            case BluetoothAdapter.ActionStateChanged:
+            case Android.Bluetooth.BluetoothAdapter.ActionStateChanged:
                 // Bluetooth adapter state changed (e.g., turning on/off)
-                var newState = (State)intent.GetIntExtra(BluetoothAdapter.ExtraState, -1);
-                var previousState = (State)intent.GetIntExtra(BluetoothAdapter.ExtraPreviousState, -1);
+                var newState = (State)intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraState, -1);
+                var previousState = (State)intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraPreviousState, -1);
 
                 OnStateChanged(new StateChangedEventArgs(newState, previousState));
                 break;
 
-            case BluetoothAdapter.ActionConnectionStateChanged:
+            case Android.Bluetooth.BluetoothAdapter.ActionConnectionStateChanged:
                 // Connection state changed for the local Bluetooth adapter
-                var connectionState = (ProfileState)intent.GetIntExtra(BluetoothAdapter.ExtraConnectionState, -1);
-                var previousConnectionState = (ProfileState)intent.GetIntExtra(BluetoothAdapter.ExtraPreviousConnectionState, -1);
+                var connectionState = (ProfileState)intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraConnectionState, -1);
+                var previousConnectionState = (ProfileState)intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraPreviousConnectionState, -1);
                 var device = intent.GetParcelableExtraSafe<Android.Bluetooth.BluetoothDevice>(Android.Bluetooth.BluetoothDevice.ExtraDevice);
                 OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState, previousConnectionState, device));
                 break;
 
-            case BluetoothAdapter.ActionLocalNameChanged:
+            case Android.Bluetooth.BluetoothAdapter.ActionLocalNameChanged:
                 // Local Bluetooth adapter name has changed
-                var newName = intent.GetStringExtra(BluetoothAdapter.ExtraLocalName);
+                var newName = intent.GetStringExtra(Android.Bluetooth.BluetoothAdapter.ExtraLocalName);
 
                 OnLocalNameChanged(new LocalNameChangedEventArgs(newName));
                 break;
 
-            case BluetoothAdapter.ActionRequestDiscoverable:
+            case Android.Bluetooth.BluetoothAdapter.ActionRequestDiscoverable:
                 // Request to make the device discoverable
-                var duration = intent.GetIntExtra(BluetoothAdapter.ExtraDiscoverableDuration, 120);
+                var duration = intent.GetIntExtra(Android.Bluetooth.BluetoothAdapter.ExtraDiscoverableDuration, 120);
 
                 OnDiscoverableRequested(new DiscoverableRequestedEventArgs(duration));
                 break;
 
-            case BluetoothAdapter.ActionRequestEnable:
+            case Android.Bluetooth.BluetoothAdapter.ActionRequestEnable:
                 // Request to enable Bluetooth
                 OnEnableRequested();
                 break;
 
-            case BluetoothAdapter.ActionDiscoveryStarted:
+            case Android.Bluetooth.BluetoothAdapter.ActionDiscoveryStarted:
                 // Bluetooth discovery has started
                 OnDiscoveryStarted();
                 break;
 
-            case BluetoothAdapter.ActionDiscoveryFinished:
+            case Android.Bluetooth.BluetoothAdapter.ActionDiscoveryFinished:
                 // Bluetooth discovery has finished
                 OnDiscoveryFinished();
                 break;
@@ -217,7 +216,7 @@ public partial class BluetoothAdapterEventsReceiver : BaseNativeEventReceiver
     /// </summary>
     protected virtual void OnEnableRequested()
     {
-        EnableRequested?.Invoke(this, EventArgs.Empty);
+        EnableRequested?.Invoke(this, System.EventArgs.Empty);
     }
 
     /// <summary>
@@ -225,7 +224,7 @@ public partial class BluetoothAdapterEventsReceiver : BaseNativeEventReceiver
     /// </summary>
     protected virtual void OnDiscoveryStarted()
     {
-        DiscoveryStarted?.Invoke(this, EventArgs.Empty);
+        DiscoveryStarted?.Invoke(this, System.EventArgs.Empty);
     }
 
     /// <summary>
@@ -233,6 +232,6 @@ public partial class BluetoothAdapterEventsReceiver : BaseNativeEventReceiver
     /// </summary>
     protected virtual void OnDiscoveryFinished()
     {
-        DiscoveryFinished?.Invoke(this, EventArgs.Empty);
+        DiscoveryFinished?.Invoke(this, System.EventArgs.Empty);
     }
 }

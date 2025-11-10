@@ -1,6 +1,6 @@
-using Plugin.Bluetooth.Enums;
+using Array = System.Array;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Represents a part of a Bluetooth LE advertisement scan record.

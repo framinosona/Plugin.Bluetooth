@@ -1,6 +1,4 @@
-using Android.Content;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for Android <see cref="Intent"/> to safely extract parcelable data

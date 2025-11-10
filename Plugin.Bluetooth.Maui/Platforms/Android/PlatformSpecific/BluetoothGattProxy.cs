@@ -1,9 +1,6 @@
-using Android.Bluetooth;
-using Android.Bluetooth.LE;
-using Java.Lang.Reflect;
-using Plugin.Bluetooth.Exceptions;
+using Exception = System.Exception;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>

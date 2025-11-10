@@ -1,7 +1,6 @@
-using Android.Bluetooth;
-using Microsoft.Extensions.Logging;
+using ScanMode = Android.Bluetooth.ScanMode;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Provides logging and property tracking for Android BluetoothAdapter operations.

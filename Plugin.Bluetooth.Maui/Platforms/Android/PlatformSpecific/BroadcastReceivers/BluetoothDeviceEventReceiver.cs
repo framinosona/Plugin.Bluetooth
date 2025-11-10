@@ -1,9 +1,4 @@
-using Android.Bluetooth;
-using Android.Content;
-using Android.OS;
-using System.Collections.ObjectModel;
-
-namespace Plugin.Bluetooth.PlatformSpecific.BroadcastReceivers;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.BroadcastReceivers;
 
 /// <summary>
 /// Broadcast receiver for handling Bluetooth device events such as bonding, connection,

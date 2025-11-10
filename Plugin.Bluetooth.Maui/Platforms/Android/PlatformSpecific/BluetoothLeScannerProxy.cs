@@ -1,6 +1,4 @@
-using Android.Bluetooth.LE;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Provides a thread-safe proxy for accessing the Android Bluetooth LE scanner.
@@ -8,7 +6,8 @@ namespace Plugin.Bluetooth.PlatformSpecific;
 /// </summary>
 public static class BluetoothLeScannerProxy
 {
-    private static readonly Lazy<BluetoothLeScanner> _lazyBluetoothLeScanner = new(() => BluetoothAdapterProxy.BluetoothAdapter.BluetoothLeScanner ?? throw new InvalidOperationException("BluetoothAdapter.BluetoothLeScanner is not available"));
+    private readonly static Lazy<BluetoothLeScanner> _lazyBluetoothLeScanner =
+        new Lazy<BluetoothLeScanner>(() => BluetoothAdapterProxy.BluetoothAdapter.BluetoothLeScanner ?? throw new InvalidOperationException("BluetoothAdapter.BluetoothLeScanner is not available"));
 
     /// <summary>
     /// Gets the Bluetooth LE scanner instance.

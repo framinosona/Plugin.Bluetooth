@@ -1,6 +1,6 @@
-using Android.Bluetooth;
+using Exception = System.Exception;
 
-namespace Plugin.Bluetooth.PlatformSpecific.Exceptions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Exceptions;
 
 /// <summary>
 /// Represents an exception that occurs when Android GATT operations return a non-success status.

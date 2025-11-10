@@ -1,6 +1,4 @@
-using Android.Content;
-
-namespace Plugin.Bluetooth.PlatformSpecific.BroadcastReceivers;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.BroadcastReceivers;
 
 /// <summary>
 /// Base class for Android broadcast receivers that handle Bluetooth-related events.

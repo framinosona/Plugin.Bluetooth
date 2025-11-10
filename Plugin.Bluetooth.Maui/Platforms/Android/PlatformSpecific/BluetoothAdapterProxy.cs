@@ -1,19 +1,18 @@
-using Android.Bluetooth;
 using Java.Lang;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Provides a proxy for Android BluetoothAdapter operations with error handling and logging.
 /// </summary>
 public static class BluetoothAdapterProxy
 {
-    private readonly static Lazy<BluetoothAdapter> _lazyBluetoothAdapter = new Lazy<BluetoothAdapter>(() => BluetoothManagerProxy.BluetoothManager.Adapter ?? throw new InvalidOperationException("BluetoothManager.Adapter is null"));
+    private readonly static Lazy<Android.Bluetooth.BluetoothAdapter> _lazyBluetoothAdapter = new Lazy<Android.Bluetooth.BluetoothAdapter>(() => BluetoothManagerProxy.BluetoothManager.Adapter ?? throw new InvalidOperationException("BluetoothManager.Adapter is null"));
 
     /// <summary>
     /// Gets the BluetoothAdapter instance.
     /// </summary>
-    public static BluetoothAdapter BluetoothAdapter => _lazyBluetoothAdapter.Value;
+    public static Android.Bluetooth.BluetoothAdapter BluetoothAdapter => _lazyBluetoothAdapter.Value;
 
     private readonly static Lazy<BluetoothAdapterProxyLogger> _lazyBluetoothAdapterLogger = new Lazy<BluetoothAdapterProxyLogger>(() => new BluetoothAdapterProxyLogger());
 

@@ -1,6 +1,4 @@
-using Java.Util;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for converting between .NET <see cref="Guid"/> and Android <see cref="UUID"/> types.

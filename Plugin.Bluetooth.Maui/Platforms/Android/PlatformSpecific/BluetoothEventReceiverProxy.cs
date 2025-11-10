@@ -1,14 +1,13 @@
-using Plugin.Bluetooth.PlatformSpecific.BroadcastReceivers;
+using Plugin.Bluetooth.Maui.PlatformSpecific.BroadcastReceivers;
 
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Provides lazy-initialized access to Bluetooth event receivers.
 /// </summary>
 public static class BluetoothEventReceiverProxy
 {
-    private static readonly Lazy<BluetoothAdapterEventsReceiver> _lazyBluetoothAdapterEventsReceiver =
-        new(() => new BluetoothAdapterEventsReceiver());
+    private readonly static Lazy<BluetoothAdapterEventsReceiver> _lazyBluetoothAdapterEventsReceiver = new Lazy<BluetoothAdapterEventsReceiver>(() => new BluetoothAdapterEventsReceiver());
 
     /// <summary>
     /// Gets the Bluetooth adapter events receiver instance.
@@ -22,8 +21,7 @@ public static class BluetoothEventReceiverProxy
     public static bool IsBluetoothAdapterEventsReceiverInitialized =>
         _lazyBluetoothAdapterEventsReceiver.IsValueCreated;
 
-    private static readonly Lazy<BluetoothDeviceEventReceiver> _lazyBluetoothDeviceEventReceiver =
-        new(() => new BluetoothDeviceEventReceiver());
+    private readonly static Lazy<BluetoothDeviceEventReceiver> _lazyBluetoothDeviceEventReceiver = new Lazy<BluetoothDeviceEventReceiver>(() => new BluetoothDeviceEventReceiver());
 
     /// <summary>
     /// Gets the Bluetooth device event receiver instance.

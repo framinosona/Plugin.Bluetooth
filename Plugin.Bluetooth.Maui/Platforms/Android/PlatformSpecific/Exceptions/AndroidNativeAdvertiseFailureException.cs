@@ -1,6 +1,4 @@
-using Android.Bluetooth.LE;
-
-namespace Plugin.Bluetooth.PlatformSpecific.Exceptions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Exceptions;
 
 /// <summary>
 /// Represents an exception that occurs when Android Bluetooth LE advertising fails.

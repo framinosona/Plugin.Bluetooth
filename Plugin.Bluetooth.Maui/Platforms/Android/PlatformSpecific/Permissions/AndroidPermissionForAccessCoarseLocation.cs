@@ -1,3 +1,3 @@
-namespace Plugin.Bluetooth.PlatformSpecific.Permissions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Permissions;
 
 public class AndroidPermissionForAccessCoarseLocation() : BaseAndroidPermissionHandler(Android.Manifest.Permission.AccessCoarseLocation, true);
