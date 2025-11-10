@@ -6,17 +6,29 @@ namespace Plugin.Bluetooth.BaseClasses;
 /// <inheritdoc cref="IBluetoothActivity" />
 public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActivity, IDisposable
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseBluetoothActivity"/> class.
+    /// Starts a periodic timer to refresh Bluetooth state values.
+    /// </summary>
     protected BaseBluetoothActivity()
     {
         StartPeriodicTimer().StartAndForget(e => BluetoothUnhandledExceptionListener.OnBluetoothUnhandledException(this, e));
     }
 
+    /// <summary>
+    /// Refreshes all native values from the underlying platform.
+    /// Override this method to add additional values that need periodic refreshing.
+    /// </summary>
     protected virtual void NativeRefreshAllValues()
     {
         NativeRefreshIsBluetoothOn();
         NativeRefreshIsRunning();
     }
 
+    /// <summary>
+    /// Releases the resources used by the <see cref="BaseBluetoothActivity"/>.
+    /// </summary>
+    /// <param name="disposing">True if called from Dispose; false if called from finalizer.</param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -76,6 +88,7 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
 
     #region IsRunning
 
+    /// <inheritdoc />
     public bool IsRunning
     {
         get => GetValue(false);
@@ -88,6 +101,10 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         }
     }
 
+    /// <summary>
+    /// Called when the <see cref="IsRunning"/> property changes.
+    /// </summary>
+    /// <param name="value">The new running state value.</param>
     protected virtual void OnIsRunningChanged(bool value)
     {
         if (value)
@@ -102,6 +119,9 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         }
     }
 
+    /// <summary>
+    /// Refreshes the native running state from the underlying platform.
+    /// </summary>
     protected abstract void NativeRefreshIsRunning();
 
     #endregion
@@ -141,14 +161,17 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
 
     #region Start
 
+    /// <inheritdoc />
     public bool IsStarting
     {
         get => GetValue(false);
         private set => SetValue(value);
     }
 
+    /// <inheritdoc />
     public event EventHandler? Starting;
 
+    /// <inheritdoc />
     public event EventHandler? Started;
 
     private TaskCompletionSource? StartTcs
@@ -157,6 +180,11 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         set => SetValue(value);
     }
 
+    /// <summary>
+    /// Called when the start operation has succeeded.
+    /// Sets the TaskCompletionSource to signal completion of the start operation.
+    /// </summary>
+    /// <exception cref="ActivityUnexpectedStartException">Thrown when the activity starts unexpectedly without a pending start operation.</exception>
     protected void OnStartSucceeded()
     {
         // Attempt to dispatch success to the TaskCompletionSource
@@ -176,6 +204,11 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         throw new ActivityUnexpectedStartException(this);
     }
 
+    /// <summary>
+    /// Called when the start operation has failed.
+    /// Sets the TaskCompletionSource exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that caused the start to fail.</param>
     protected void OnStartFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource
@@ -248,20 +281,28 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         }
     }
 
+    /// <summary>
+    /// Starts the native Bluetooth activity with the specified options.
+    /// This method is called by <see cref="StartAsync"/> to perform platform-specific start operations.
+    /// </summary>
+    /// <param name="nativeOptions">Platform-specific options for starting the activity.</param>
     protected abstract void NativeStart(Dictionary<string, object>? nativeOptions);
 
     #endregion
 
     #region Stop
 
+    /// <inheritdoc />
     public bool IsStopping
     {
         get => GetValue(false);
         private set => SetValue(value);
     }
 
+    /// <inheritdoc />
     public event EventHandler? Stopping;
 
+    /// <inheritdoc />
     public event EventHandler? Stopped;
 
     private TaskCompletionSource? StopTcs
@@ -270,6 +311,11 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         set => SetValue(value);
     }
 
+    /// <summary>
+    /// Called when the stop operation has succeeded.
+    /// Sets the TaskCompletionSource to signal completion of the stop operation.
+    /// </summary>
+    /// <exception cref="ActivityUnexpectedStopException">Thrown when the activity stops unexpectedly without a pending stop operation.</exception>
     protected void OnStopSucceeded()
     {
         // Attempt to dispatch success to the TaskCompletionSource
@@ -289,6 +335,11 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         throw new ActivityUnexpectedStopException(this);
     }
 
+    /// <summary>
+    /// Called when the stop operation has failed.
+    /// Sets the TaskCompletionSource exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that caused the stop to fail.</param>
     protected void OnStopFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource
@@ -358,6 +409,10 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
         }
     }
 
+    /// <summary>
+    /// Stops the native Bluetooth activity.
+    /// This method is called by <see cref="StopAsync"/> to perform platform-specific stop operations.
+    /// </summary>
     protected abstract void NativeStop();
 
     #endregion
