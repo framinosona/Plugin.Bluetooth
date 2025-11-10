@@ -1,10 +1,4 @@
-using CoreBluetooth;
-
-using Foundation;
-
-using Plugin.Bluetooth.Exceptions;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>

@@ -1,9 +1,4 @@
-using System;
-
-using CoreBluetooth;
-using Foundation;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 // Mapping native APIs leads to unclean interfaces, ignoring warnings here
 #pragma warning disable CA1034 // Nested types should not be visible

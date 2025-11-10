@@ -1,5 +1,5 @@
 
-namespace Plugin.Bluetooth.PlatformSpecific.Permissions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Permissions;
 
 /// <summary>
 /// iOS permission for Bluetooth Peripheral usage.
