@@ -1,6 +1,4 @@
-using Windows.Devices.Bluetooth;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Proxy class for Windows Bluetooth adapter that provides a singleton-like access pattern
@@ -13,7 +11,7 @@ public partial class BluetoothAdapterProxy
     /// </summary>
     /// <param name="bluetoothAdapter">The native Windows Bluetooth adapter instance.</param>
     /// <param name="bluetoothAdapterProxyDelegate">The delegate for handling Bluetooth adapter events.</param>
-    private BluetoothAdapterProxy(BluetoothAdapter bluetoothAdapter, IBluetoothAdapterProxyDelegate bluetoothAdapterProxyDelegate)
+    private BluetoothAdapterProxy(Windows.Devices.Bluetooth.BluetoothAdapter bluetoothAdapter, IBluetoothAdapterProxyDelegate bluetoothAdapterProxyDelegate)
     {
         BluetoothAdapterProxyDelegate = bluetoothAdapterProxyDelegate;
         BluetoothAdapter = bluetoothAdapter;
@@ -27,14 +25,14 @@ public partial class BluetoothAdapterProxy
     /// <summary>
     /// Gets the native Windows Bluetooth adapter instance.
     /// </summary>
-    public BluetoothAdapter BluetoothAdapter { get; }
+    public Windows.Devices.Bluetooth.BluetoothAdapter BluetoothAdapter { get; }
 
     #region Static instance
 
     /// <summary>
     /// Gets or sets the cached Bluetooth adapter instance.
     /// </summary>
-    private static BluetoothAdapter? BluetoothAdapterInstance { get; set; }
+    private static Windows.Devices.Bluetooth.BluetoothAdapter? BluetoothAdapterInstance { get; set; }
 
     /// <summary>
     /// Gets a singleton instance of the <see cref="BluetoothAdapterProxy"/> with the specified delegate.
@@ -44,9 +42,9 @@ public partial class BluetoothAdapterProxy
     /// <exception cref="PermissionException">
     /// Thrown when the default Bluetooth adapter is null, indicating missing Bluetooth capability in the app manifest.
     /// </exception>
-    public static async Task<BluetoothAdapterProxy> GetInstanceAsync(IBluetoothAdapterProxyDelegate bluetoothAdapterProxyDelegate)
+    public async static Task<BluetoothAdapterProxy> GetInstanceAsync(IBluetoothAdapterProxyDelegate bluetoothAdapterProxyDelegate)
     {
-        BluetoothAdapterInstance ??= await BluetoothAdapter.GetDefaultAsync();
+        BluetoothAdapterInstance ??= await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync();
         if (BluetoothAdapterInstance == null)
         {
             throw new PermissionException("BluetoothAdapter.GetDefaultAsync = null, Did you forget to add '<DeviceCapability Name=\"bluetooth\" />' in your Manifest's Capabilities?");

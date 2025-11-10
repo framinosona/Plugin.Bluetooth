@@ -1,11 +1,6 @@
-using Plugin.Bluetooth.Exceptions;
-using Plugin.Bluetooth.PlatformSpecific.Exceptions;
+using Plugin.Bluetooth.Maui.PlatformSpecific.Exceptions;
 
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Devices.Enumeration;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>
@@ -51,7 +46,6 @@ public sealed partial class BluetoothLeDeviceProxy : IDisposable
         BluetoothLeDevice.DeviceAccessInformation.AccessChanged -= OnAccessChanged;
         BluetoothLeDevice.DeviceInformation.Pairing.Custom.PairingRequested -= OnCustomPairingRequested;
         BluetoothLeDevice.Dispose();
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -61,7 +55,7 @@ public sealed partial class BluetoothLeDeviceProxy : IDisposable
     /// <param name="bluetoothLeDeviceProxyDelegate">The delegate for handling Bluetooth LE device events.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the device proxy instance.</returns>
     /// <exception cref="WindowsNativeBluetoothException">Thrown when the Bluetooth LE device cannot be created.</exception>
-    public static async Task<BluetoothLeDeviceProxy> GetInstanceAsync(ulong bluetoothAddress, IBluetoothLeDeviceProxyDelegate bluetoothLeDeviceProxyDelegate)
+    public async static Task<BluetoothLeDeviceProxy> GetInstanceAsync(ulong bluetoothAddress, IBluetoothLeDeviceProxyDelegate bluetoothLeDeviceProxyDelegate)
     {
         var nativeBleDevice = await BluetoothLEDevice.FromBluetoothAddressAsync(bluetoothAddress).AsTask().ConfigureAwait(false);
 

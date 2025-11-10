@@ -1,10 +1,6 @@
-using Plugin.Bluetooth.Exceptions;
-using Plugin.Bluetooth.PlatformSpecific.Exceptions;
+using Plugin.Bluetooth.Maui.PlatformSpecific.Exceptions;
 
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>
@@ -44,7 +40,6 @@ public sealed partial class GattSessionProxy : IDisposable
         GattSession.SessionStatusChanged -= OnSessionStatusChanged;
         GattSession.MaxPduSizeChanged -= OnMaxPduSizeChanged;
         GattSession.Dispose();
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -89,7 +84,7 @@ public sealed partial class GattSessionProxy : IDisposable
     /// <returns>A task that represents the asynchronous operation. The task result contains the GATT session proxy instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="bluetoothLeDevice"/> is null.</exception>
     /// <exception cref="WindowsNativeBluetoothException">Thrown when the GATT session cannot be created.</exception>
-    public static async Task<GattSessionProxy> GetInstanceAsync(BluetoothLEDevice bluetoothLeDevice, IGattSessionProxyDelegate gattSessionProxyDelegate)
+    public async static Task<GattSessionProxy> GetInstanceAsync(BluetoothLEDevice bluetoothLeDevice, IGattSessionProxyDelegate gattSessionProxyDelegate)
     {
         ArgumentNullException.ThrowIfNull(bluetoothLeDevice);
 

@@ -1,9 +1,4 @@
-using Plugin.Bluetooth.Exceptions;
-
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Devices.Enumeration;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>
@@ -41,7 +36,6 @@ public sealed partial class GattDeviceServiceProxy : IDisposable
     {
         GattDeviceService.DeviceAccessInformation.AccessChanged -= OnAccessChanged;
         GattDeviceService.Dispose();
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>

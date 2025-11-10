@@ -1,10 +1,4 @@
-using System.Runtime.InteropServices.WindowsRuntime;
-
-using Plugin.Bluetooth.Exceptions;
-
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>
@@ -41,7 +35,6 @@ public sealed partial class GattCharacteristicProxy : IDisposable
     public void Dispose()
     {
         GattCharacteristic.ValueChanged -= OnValueChanged;
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>

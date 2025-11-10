@@ -1,10 +1,4 @@
-using Plugin.Bluetooth.Exceptions;
-
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Devices.Enumeration;
-
-namespace Plugin.Bluetooth.PlatformSpecific.Exceptions;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific.Exceptions;
 
 /// <summary>
 /// Represents a Windows-specific native Bluetooth exception that provides detailed error descriptions

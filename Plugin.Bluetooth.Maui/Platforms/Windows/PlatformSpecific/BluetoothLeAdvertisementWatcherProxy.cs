@@ -1,8 +1,4 @@
-using Plugin.Bluetooth.Exceptions;
-
-using Windows.Devices.Bluetooth.Advertisement;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 
 /// <summary>

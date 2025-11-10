@@ -1,10 +1,4 @@
-using System.Runtime.Versioning;
-
-using Plugin.Bluetooth.Maui.Exceptions;
-
-using Windows.Security.Authorization.AppCapabilityAccess;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for Windows <see cref="AppCapability"/> objects to simplify
@@ -21,7 +15,7 @@ public static class AppCapabilityExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="appCapability"/> is null.</exception>
     /// <exception cref="NativePermissionException">Thrown when access is not granted.</exception>
     [SupportedOSPlatform("Windows10.0.18362.0")]
-    public static async Task<AppCapabilityAccessStatus> RequestIfNeededAsync(this AppCapability appCapability)
+    public async static Task<AppCapabilityAccessStatus> RequestIfNeededAsync(this AppCapability appCapability)
     {
         ArgumentNullException.ThrowIfNull(appCapability);
         if (appCapability.CheckAccess() == AppCapabilityAccessStatus.Allowed)

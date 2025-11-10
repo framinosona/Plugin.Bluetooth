@@ -1,8 +1,4 @@
-using Plugin.Bluetooth.Abstractions;
-
-using Windows.Devices.Enumeration;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 #pragma warning disable CA1034 // Nested types should not be visible
 #pragma warning disable CA1711 // Identifiers should not have incorrect suffix
@@ -13,7 +9,7 @@ public partial class GattDeviceServiceProxy
     /// Delegate interface for handling GATT device service operations and events.
     /// Extends the base Bluetooth service interface with Windows-specific service callbacks.
     /// </summary>
-    public interface IBluetoothServiceProxyDelegate : IBluetoothService
+    public interface IBluetoothServiceProxyDelegate
     {
         /// <summary>
         /// Called when the device access status changes for the service.

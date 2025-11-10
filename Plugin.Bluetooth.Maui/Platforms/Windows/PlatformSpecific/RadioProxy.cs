@@ -1,6 +1,4 @@
-using Windows.Devices.Radios;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Proxy class for Windows Radio that provides event handling and singleton-like access patterns
@@ -55,7 +53,7 @@ public partial class RadioProxy
     /// <returns>A task that represents the asynchronous operation. The task result contains the radio proxy instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="bluetoothAdapterProxy"/> is null.</exception>
     /// <exception cref="PermissionException">Thrown when the radio cannot be retrieved, indicating missing Bluetooth capability.</exception>
-    public static async Task<RadioProxy> GetInstanceAsync(BluetoothAdapterProxy bluetoothAdapterProxy, IRadioProxyDelegate radioProxyDelegate)
+    public async static Task<RadioProxy> GetInstanceAsync(BluetoothAdapterProxy bluetoothAdapterProxy, IRadioProxyDelegate radioProxyDelegate)
     {
         ArgumentNullException.ThrowIfNull(bluetoothAdapterProxy, nameof(bluetoothAdapterProxy));
         RadioInstance ??= await bluetoothAdapterProxy.BluetoothAdapter.GetRadioAsync();

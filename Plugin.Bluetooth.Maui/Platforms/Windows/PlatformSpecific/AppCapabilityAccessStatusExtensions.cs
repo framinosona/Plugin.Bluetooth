@@ -1,8 +1,4 @@
-using System.Runtime.Versioning;
-
-using Windows.Security.Authorization.AppCapabilityAccess;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for converting Windows <see cref="AppCapabilityAccessStatus"/> values

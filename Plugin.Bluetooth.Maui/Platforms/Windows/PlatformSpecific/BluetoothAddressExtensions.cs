@@ -1,6 +1,4 @@
-using System.Globalization;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 /// <summary>
 /// Extension methods for converting Bluetooth addresses between different formats.

@@ -1,9 +1,4 @@
-using Plugin.Bluetooth.Abstractions;
-
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Enumeration;
-
-namespace Plugin.Bluetooth.PlatformSpecific;
+namespace Plugin.Bluetooth.Maui.PlatformSpecific;
 
 #pragma warning disable CA1034 // Nested types should not be visible
 #pragma warning disable CA1711 // Identifiers should not have incorrect suffix
