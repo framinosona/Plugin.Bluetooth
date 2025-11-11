@@ -1,21 +1,31 @@
-using System.Globalization;
-using System.Text;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoothDevice
 {
+    /// <summary>
+    /// Waits for the device's advertised name to change.
+    /// </summary>
+    /// <param name="timeout">Optional timeout for the operation.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>A task that completes when the advertised name changes.</returns>
     public Task WaitForNameToChangeAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         return WaitForPropertyToChange<string>(nameof(AdvertisedName), timeout, cancellationToken).AsTask();
     }
 
+    /// <summary>
+    /// Gets the debug-friendly name of the device, including both advertised and cached names for logging purposes.
+    /// </summary>
     public string DebugName
     {
         get => GetValue<string>("");
         protected set => SetValue(value);
     }
 
+    /// <summary>
+    /// Gets the name advertised by the device in its advertisement data.
+    /// </summary>
     public string AdvertisedName
     {
         get => GetValue<string>("");
@@ -30,12 +40,16 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         }
     }
 
+    /// <inheritdoc/>
     public string Name
     {
         get => GetValue("");
         protected set => SetValue(value);
     }
 
+    /// <summary>
+    /// Gets the cached name of the device, typically stored from previous connections or GATT reads.
+    /// </summary>
     public string CachedName
     {
         get => GetValue<string>("");

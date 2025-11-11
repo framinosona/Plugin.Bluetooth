@@ -5,21 +5,9 @@ namespace Plugin.Bluetooth.BaseClasses;
 public abstract partial class BaseBluetoothBroadcaster : BaseBluetoothActivity, IBluetoothBroadcaster
 {
     /// <summary>
-    /// Initializes the Bluetooth scanner.
+    /// Platform-specific implementation to set the advertising data for the broadcaster.
     /// </summary>
-    protected async virtual ValueTask InitializeAsync()
-    {
-        await NativeInitializeAsync().ConfigureAwait(false);
-    }
-
-    protected override void NativeRefreshAllValues()
-    {
-        NativeRefreshIsBluetoothOn();
-        NativeRefreshIsBroadcasting();
-    }
-
-    protected abstract void NativeRefreshIsBroadcasting();
-
-    protected abstract ValueTask NativeInitializeAsync();
-    public abstract Task NativeSetAdvertisingDataAsync(IEnumerable<Guid> serviceGuids);
+    /// <param name="nativeOptions">Platform-specific options for setting advertising data.</param>
+    /// <returns>A task that completes when the advertising data has been set.</returns>
+    public abstract Task NativeSetAdvertisingDataAsync(Dictionary<string, object>? nativeOptions = null);
 }

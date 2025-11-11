@@ -3,21 +3,28 @@ namespace Plugin.Bluetooth.BaseClasses;
 /// <inheritdoc cref="IBluetoothScanner" />
 public abstract partial class BaseBluetoothScanner : BaseBluetoothActivity, IBluetoothScanner
 {
-    /// <summary>
-    /// Initializes the Bluetooth scanner.
-    /// </summary>
-    protected async virtual ValueTask InitializeAsync(Dictionary<string, object>? options = null)
+    /// <inheritdoc />
+    protected async override ValueTask InitializeAsync(Dictionary<string, object>? nativeOptions = null)
     {
         await KnownServicesAndCharacteristicsRepository.AddAllServiceDefinitionsInCurrentAssemblyAsync().ConfigureAwait(false);
-        await NativeInitializeAsync(options).ConfigureAwait(false);
+        await NativeInitializeAsync(nativeOptions).ConfigureAwait(false);
     }
 
-    protected abstract ValueTask NativeInitializeAsync(Dictionary<string, object>? options = null);
-
+    /// <inheritdoc />
     public IBluetoothCharacteristicAccessServicesRepository KnownServicesAndCharacteristicsRepository { get; } = new CharacteristicAccessServicesRepository();
 
+    /// <summary>
+    /// Creates a native device from the advertisement
+    /// </summary>
+    /// <param name="advertisement"></param>
+    /// <returns></returns>
     protected abstract IBluetoothDevice NativeCreateDevice(IBluetoothAdvertisement advertisement);
 
+    /// <summary>
+    /// Creates and adds a device from the advertisement
+    /// </summary>
+    /// <param name="advertisement"></param>
+    /// <returns></returns>
     protected virtual IBluetoothDevice AddDeviceFromAdvertisement(IBluetoothAdvertisement advertisement)
     {
         var device = NativeCreateDevice(advertisement);

@@ -1,9 +1,12 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoothDevice
 {
+    /// <summary>
+    /// Clears all services and their characteristics, disposing of them properly.
+    /// </summary>
+    /// <returns>A task that completes when all services have been cleared and disposed.</returns>
     public async ValueTask ClearServicesAsync()
     {
         foreach (var service in Services)

@@ -1,17 +1,20 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoothDevice
 {
+    /// <inheritdoc/>
     public event EventHandler<ServicesAddedEventArgs>? ServicesAdded;
 
+    /// <inheritdoc/>
     public event EventHandler<ServicesRemovedEventArgs>? ServicesRemoved;
 
+    /// <inheritdoc/>
     public event EventHandler<ServiceListChangedEventArgs>? ServiceListChanged;
 
     private ObservableCollection<IBluetoothService>? _services;
 
+    /// <inheritdoc/>
     protected ObservableCollection<IBluetoothService> Services
     {
         get

@@ -4,12 +4,14 @@ namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoothDevice
 {
+    /// <inheritdoc/>
     public double? BatteryLevelPercent
     {
         get => GetValue<double?>(null);
         private set => SetValue(value);
     }
 
+    /// <inheritdoc/>
     public async Task<double?> ReadBatteryLevelAsync()
     {
         if (await BatteryServiceDefinition.BatteryLevel.CanReadAsync(this).ConfigureAwait(false))

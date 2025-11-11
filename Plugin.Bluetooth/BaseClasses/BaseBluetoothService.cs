@@ -3,6 +3,11 @@ namespace Plugin.Bluetooth.BaseClasses;
 /// <inheritdoc cref="IBluetoothService" />
 public abstract partial class BaseBluetoothService : BaseBindableObject, IBluetoothService
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseBluetoothService"/> class.
+    /// </summary>
+    /// <param name="device">The Bluetooth device associated with this service.</param>
+    /// <param name="serviceUuid">The unique identifier of the service.</param>
     protected BaseBluetoothService(IBluetoothDevice device, Guid serviceUuid)
     {
         Device = device;
@@ -10,12 +15,19 @@ public abstract partial class BaseBluetoothService : BaseBindableObject, IBlueto
         Name = Device.Scanner.KnownServicesAndCharacteristicsRepository.GetServiceName(serviceUuid);
     }
 
+    /// <inheritdoc/>
     public IBluetoothDevice Device { get; }
 
+    /// <inheritdoc/>
     public Guid Id { get; }
 
+    /// <inheritdoc/>
     public string Name { get;}
 
+    /// <summary>
+    /// Performs the core disposal logic for the service, including canceling pending operations and cleaning up resources.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous disposal operation.</returns>
     protected async virtual ValueTask DisposeAsyncCore()
     {
         // Cancel any pending explorations

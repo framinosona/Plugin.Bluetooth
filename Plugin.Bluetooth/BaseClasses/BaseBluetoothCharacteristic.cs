@@ -1,12 +1,15 @@
 
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 /// <inheritdoc cref="IBluetoothCharacteristic" />
 public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, IBluetoothCharacteristic
 {
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseBluetoothCharacteristic"/> class.
+    /// </summary>
+    /// <param name="service">The Bluetooth service associated with this characteristic.</param>
+    /// <param name="id">The unique identifier of the characteristic.</param>
     protected BaseBluetoothCharacteristic(IBluetoothService service, Guid id)
     {
         ArgumentNullException.ThrowIfNull(service);
@@ -27,6 +30,10 @@ public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, 
 
 
 
+    /// <summary>
+    /// Performs the core disposal logic for the characteristic, including stopping listening and cleaning up resources.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous disposal operation.</returns>
     protected async virtual ValueTask DisposeAsyncCore()
     {
         // Stop listening if active
@@ -64,16 +71,22 @@ public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, 
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc/>
     public IBluetoothCharacteristicAccessService AccessService { get; }
 
+    /// <inheritdoc/>
     public IBluetoothService Service { get; }
 
+    /// <inheritdoc/>
     public Guid Id { get; }
 
+    /// <inheritdoc/>
     public string Name { get; }
 
+    /// <inheritdoc/>
     public ReadOnlySpan<byte> ValueSpan => Value.Span;
 
+    /// <inheritdoc/>
     public ReadOnlyMemory<byte> Value
     {
         get => GetValue<ReadOnlyMemory<byte>>(default);
@@ -81,6 +94,7 @@ public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, 
     }
 
 
+    /// <inheritdoc/>
     public event EventHandler<ValueUpdatedEventArgs>? ValueUpdated;
 
     /// <summary>
@@ -124,14 +138,28 @@ public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, 
         return $"{Name} ({Id}) ({string.Join("/", access.Where(s => !string.IsNullOrEmpty(s)))})";
     }
 
+    /// <summary>
+    /// Gets the read capability string representation for the characteristic.
+    /// </summary>
+    /// <returns>Returns "R" if the characteristic can be read, otherwise an empty string.</returns>
     protected virtual string ToReadString()
     {
         return CanRead ? "R" : string.Empty;
     }
+
+    /// <summary>
+    /// Gets the write capability string representation for the characteristic.
+    /// </summary>
+    /// <returns>Returns "W" if the characteristic can be written to, otherwise an empty string.</returns>
     protected virtual string ToWriteString()
     {
         return CanWrite ? "W" : string.Empty;
     }
+
+    /// <summary>
+    /// Gets the notification capability string representation for the characteristic.
+    /// </summary>
+    /// <returns>Returns "N*" if listening, "N" if notifications are supported but not listening, otherwise an empty string.</returns>
     protected virtual string ToListenString()
     {
         return CanListen ? IsListening ? "N*" : "N" : string.Empty;

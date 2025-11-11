@@ -1,5 +1,8 @@
 namespace Plugin.Bluetooth.BluetoothSigSpecific;
 
+/// <summary>
+/// Contains constants and standard values defined by the Bluetooth SIG (Special Interest Group).
+/// </summary>
 public static class BluetoothSigConstants
 {
     /// <summary>Bluetooth Gatt Standard Guid Extension</summary>

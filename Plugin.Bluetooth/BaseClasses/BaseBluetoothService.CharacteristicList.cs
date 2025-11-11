@@ -1,17 +1,20 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothService
 {
+    /// <inheritdoc/>
     public event EventHandler<CharacteristicsAddedEventArgs>? CharacteristicsAdded;
 
+    /// <inheritdoc/>
     public event EventHandler<CharacteristicsRemovedEventArgs>? CharacteristicsRemoved;
 
+    /// <inheritdoc/>
     public event EventHandler<CharacteristicListChangedEventArgs>? CharacteristicListChanged;
 
     private ObservableCollection<IBluetoothCharacteristic>? _characteristics;
 
+    /// <inheritdoc/>
     protected ObservableCollection<IBluetoothCharacteristic> Characteristics
     {
         get

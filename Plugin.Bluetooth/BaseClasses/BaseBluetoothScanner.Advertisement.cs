@@ -1,15 +1,18 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothScanner
 {
+    /// <summary>
+    /// Gets or sets a value indicating whether to ignore duplicate advertisements from the same device.
+    /// </summary>
     public bool IgnoreDuplicateAdvertisements
     {
         get => GetValue(false);
         set => SetValue(value);
     }
 
+    /// <inheritdoc/>
     public Func<IBluetoothAdvertisement, bool> AdvertisementFilter { get; set; } = DefaultAdvertisementFilter;
 
     private static bool DefaultAdvertisementFilter(IBluetoothAdvertisement arg)
@@ -17,8 +20,13 @@ public abstract partial class BaseBluetoothScanner
         return false;
     }
 
+    /// <inheritdoc/>
     public event EventHandler<AdvertisementReceivedEventArgs>? AdvertisementReceived;
 
+    /// <summary>
+    /// Processes a received advertisement, applying filters and triggering events.
+    /// </summary>
+    /// <param name="advertisement">The advertisement to process.</param>
     protected void OnAdvertisementReceived(IBluetoothAdvertisement advertisement)
     {
         ArgumentNullException.ThrowIfNull(advertisement, nameof(advertisement));
@@ -46,7 +54,10 @@ public abstract partial class BaseBluetoothScanner
     }
 
 
-    // Mainly for android Batch advertisement
+    /// <summary>
+    /// Processes multiple received advertisements in batch, primarily for Android batch advertisement processing.
+    /// </summary>
+    /// <param name="advertisements">The collection of advertisements to process.</param>
     protected void OnAdvertisementsReceived(IEnumerable<IBluetoothAdvertisement> advertisements)
     {
         // Filter

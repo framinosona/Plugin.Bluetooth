@@ -1,5 +1,4 @@
 
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
@@ -36,6 +35,20 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
             StopPeriodicTimer();
         }
     }
+    /// <summary>
+    /// Initializes the activity.
+    /// </summary>
+    protected async virtual ValueTask InitializeAsync(Dictionary<string, object>? nativeOptions = null)
+    {
+        await NativeInitializeAsync(nativeOptions).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Performs platform-specific initialization for the Bluetooth activity.
+    /// </summary>
+    /// <param name="nativeOptions">Platform-specific options for initialization.</param>
+    /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+    protected abstract ValueTask NativeInitializeAsync(Dictionary<string, object>? nativeOptions = null);
 
     /// <summary>
     /// Disposes the Bluetooth manager and releases resources.
@@ -286,7 +299,7 @@ public abstract class BaseBluetoothActivity : BaseBindableObject, IBluetoothActi
     /// This method is called by <see cref="StartAsync"/> to perform platform-specific start operations.
     /// </summary>
     /// <param name="nativeOptions">Platform-specific options for starting the activity.</param>
-    protected abstract void NativeStart(Dictionary<string, object>? nativeOptions);
+    protected abstract void NativeStart(Dictionary<string, object>? nativeOptions = null);
 
     #endregion
 

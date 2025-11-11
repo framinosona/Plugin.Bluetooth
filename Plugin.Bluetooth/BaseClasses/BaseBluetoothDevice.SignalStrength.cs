@@ -26,6 +26,9 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
     /// </summary>
     public static int SignalStrengthJitterSmoothingStrengthConnected { get; set; } = 3;
 
+    /// <summary>
+    /// Gets a value indicating whether a signal strength reading operation is currently in progress.
+    /// </summary>
     public bool IsReadingSignalStrength
     {
         get => GetValue(false);
@@ -91,12 +94,20 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         return (rssi - _farRssiValue) / (_closeRssiValue - _farRssiValue);
     }
 
+    /// <summary>
+    /// Called when signal strength reading succeeds. Updates the SignalStrengthDbm property and completes the task.
+    /// </summary>
+    /// <param name="rssi">The signal strength value in dBm.</param>
     protected void OnSignalStrengthRead(int rssi)
     {
         SignalStrengthDbm = rssi;
         SignalStrengthReadingTcs?.TrySetResult();
     }
 
+    /// <summary>
+    /// Called when signal strength reading fails. Completes the task with an exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that occurred during the signal strength reading.</param>
     protected void OnSignalStrengthReadFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource
@@ -110,8 +121,17 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         BluetoothUnhandledExceptionListener.OnBluetoothUnhandledException(this, e);
     }
 
+    /// <summary>
+    /// Platform-specific implementation to initiate a signal strength reading.
+    /// </summary>
     protected abstract void NativeReadSignalStrength();
 
+    /// <summary>
+    /// Attempts to read the device's signal strength, suppressing any exceptions that occur.
+    /// </summary>
+    /// <param name="timeout">Optional timeout for the operation.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>A task that completes when the signal strength reading attempt finishes.</returns>
     public async Task TryReadSignalStrengthAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         try
@@ -124,6 +144,7 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         }
     }
 
+    /// <inheritdoc/>
     public async Task ReadSignalStrengthAsync(TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         // Ensure Device is Connected

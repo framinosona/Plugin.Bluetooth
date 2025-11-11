@@ -3,6 +3,9 @@ namespace Plugin.Bluetooth.BaseClasses;
 /// <inheritdoc cref="IBluetoothAdvertisement" />
 public abstract partial class BaseBluetoothAdvertisement : BaseBindableObject, IBluetoothAdvertisement
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseBluetoothAdvertisement"/> class.
+    /// </summary>
     protected BaseBluetoothAdvertisement()
     {
         DateReceived = DateTimeOffset.UtcNow;
@@ -18,26 +21,36 @@ public abstract partial class BaseBluetoothAdvertisement : BaseBindableObject, I
 
     #region IBluetoothAdvertisement Members
 
+    /// <inheritdoc/>
     public DateTimeOffset DateReceived { get; }
 
+    /// <inheritdoc/>
     public string DeviceName => LazyDeviceName.Value;
 
+    /// <inheritdoc/>
     public IEnumerable<Guid> ServicesGuids => LazyServicesGuids.Value;
 
+    /// <inheritdoc/>
     public bool IsConnectable => LazyIsConnectable.Value;
 
+    /// <inheritdoc/>
     public int RawSignalStrengthInDBm => LazyRawSignalStrengthInDBm.Value;
 
+    /// <inheritdoc/>
     public int TransmitPowerLevelInDBm => LazyTransmitPowerLevelInDBm.Value;
 
     private string? _bluetoothAddress;
 
+    /// <inheritdoc/>
     public string BluetoothAddress => _bluetoothAddress ??= InitBluetoothAddress();
 
+    /// <inheritdoc/>
     public ReadOnlyMemory<byte> ManufacturerData => LazyManufacturerData.Value;
 
+    /// <inheritdoc/>
     public Manufacturer Manufacturer => LazyManufacturer.Value;
 
+    /// <inheritdoc/>
     public int ManufacturerId => LazyManufacturerId.Value;
 
     #endregion

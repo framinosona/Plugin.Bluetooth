@@ -2,6 +2,9 @@ namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothService
 {
+    /// <summary>
+    /// Gets a value indicating whether characteristic exploration is currently in progress.
+    /// </summary>
     public bool IsExploringCharacteristics
     {
         get => GetValue(false);
@@ -14,6 +17,13 @@ public abstract partial class BaseBluetoothService
         set => SetValue(value);
     }
 
+    /// <summary>
+    /// Called when characteristic exploration succeeds. Updates the Characteristics collection and completes the exploration task.
+    /// </summary>
+    /// <typeparam name="TNativeCharacteristicType">The platform-specific characteristic type.</typeparam>
+    /// <param name="characteristics">The list of native characteristics discovered.</param>
+    /// <param name="fromInputTypeToOutputTypeConversion">Function to convert from native characteristic type to IBluetoothCharacteristic.</param>
+    /// <param name="areRepresentingTheSameObject">Function to determine if a native characteristic and IBluetoothCharacteristic represent the same object.</param>
     protected void OnCharacteristicsExplorationSucceeded<TNativeCharacteristicType>(IList<TNativeCharacteristicType> characteristics, Func<TNativeCharacteristicType, IBluetoothCharacteristic> fromInputTypeToOutputTypeConversion, Func<TNativeCharacteristicType, IBluetoothCharacteristic, bool> areRepresentingTheSameObject)
     {
         Characteristics.UpdateFrom(characteristics, areRepresentingTheSameObject, fromInputTypeToOutputTypeConversion);
@@ -29,6 +39,10 @@ public abstract partial class BaseBluetoothService
         throw new UnexpectedCharacteristicExplorationException(this);
     }
 
+    /// <summary>
+    /// Called when characteristic exploration fails. Completes the exploration task with an exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that occurred during characteristic exploration.</param>
     protected void OnCharacteristicsExplorationFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource

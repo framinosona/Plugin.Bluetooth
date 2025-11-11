@@ -2,6 +2,9 @@ namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoothDevice
 {
+    /// <summary>
+    /// Gets a value indicating whether service exploration is currently in progress.
+    /// </summary>
     public bool IsExploringServices
     {
         get => GetValue(false);
@@ -14,6 +17,13 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         set => SetValue(value);
     }
 
+    /// <summary>
+    /// Called when service exploration succeeds. Updates the Services collection and completes the exploration task.
+    /// </summary>
+    /// <typeparam name="TNativeServiceType">The platform-specific service type.</typeparam>
+    /// <param name="services">The list of native services discovered.</param>
+    /// <param name="fromInputTypeToOutputTypeConversion">Function to convert from native service type to IBluetoothService.</param>
+    /// <param name="areRepresentingTheSameObject">Function to determine if a native service and IBluetoothService represent the same object.</param>
     protected void OnServicesExplorationSucceeded<TNativeServiceType>(IList<TNativeServiceType> services, Func<TNativeServiceType, IBluetoothService> fromInputTypeToOutputTypeConversion, Func<TNativeServiceType, IBluetoothService, bool> areRepresentingTheSameObject)
     {
         Services.UpdateFrom(services, areRepresentingTheSameObject, fromInputTypeToOutputTypeConversion);
@@ -29,6 +39,10 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         throw new UnexpectedServiceExplorationException(this);
     }
 
+    /// <summary>
+    /// Called when service exploration fails. Completes the exploration task with an exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that occurred during service exploration.</param>
     protected void OnServicesExplorationFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource

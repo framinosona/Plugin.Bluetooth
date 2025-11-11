@@ -1,17 +1,20 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothScanner
 {
+    /// <inheritdoc/>
     public event EventHandler<DeviceListChangedEventArgs>? DeviceListChanged;
 
+    /// <inheritdoc/>
     public event EventHandler<DevicesAddedEventArgs>? DevicesAdded;
 
+    /// <inheritdoc/>
     public event EventHandler<DevicesRemovedEventArgs>? DevicesRemoved;
 
     private ObservableCollection<IBluetoothDevice>? _devices;
 
+    /// <inheritdoc/>
     protected ObservableCollection<IBluetoothDevice> Devices
     {
         get

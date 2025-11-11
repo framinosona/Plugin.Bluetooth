@@ -4,6 +4,9 @@ public abstract partial class BaseBluetoothCharacteristic
 {
     private SemaphoreSlim WriteSemaphoreSlim { get; } = new SemaphoreSlim(1, 1);
 
+    /// <summary>
+    /// Gets a value indicating whether a write value operation is currently in progress.
+    /// </summary>
     public bool IsWritingValue
     {
         get => GetValue(false);
@@ -76,6 +79,9 @@ public abstract partial class BaseBluetoothCharacteristic
     /// <inheritdoc/>
     protected abstract ValueTask NativeWriteValueAsync(ReadOnlyMemory<byte> value, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Called when writing the characteristic's value succeeds. Completes the task successfully.
+    /// </summary>
     protected void OnWriteValueSucceeded()
     {
         // Attempt to dispatch success to the TaskCompletionSource
@@ -89,6 +95,10 @@ public abstract partial class BaseBluetoothCharacteristic
         throw new CharacteristicUnexpectedWriteException(this);
     }
 
+    /// <summary>
+    /// Called when writing the characteristic's value fails. Completes the task with an exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that occurred during the write operation.</param>
     protected void OnWriteValueFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource
@@ -104,10 +114,15 @@ public abstract partial class BaseBluetoothCharacteristic
 
     #region CanWrite
 
+    /// <summary>
+    /// Platform-specific implementation to determine if the characteristic can be written to.
+    /// </summary>
+    /// <returns>True if the characteristic supports write operations; otherwise, false.</returns>
     protected abstract bool NativeCanWrite();
 
     private Lazy<bool> LazyCanWrite { get; }
 
+    /// <inheritdoc/>
     public bool CanWrite => LazyCanWrite.Value;
 
     #endregion

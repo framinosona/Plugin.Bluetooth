@@ -7,8 +7,14 @@ namespace Plugin.Bluetooth.BluetoothSigSpecific.ServiceDefinitions;
 public static class DeviceInformationServiceDefinition
 {
     // https://www.bluetooth.com/specifications/gatt/characteristics/
+    /// <summary>
+    /// Gets the human-readable name of the Device Information Service.
+    /// </summary>
     public readonly static string Name = "Device Information";
 
+    /// <summary>
+    /// Gets the UUID of the Device Information Service (0x180A).
+    /// </summary>
     public readonly static Guid Id = new Guid($"0000180A{BluetoothSigConstants.StandardGuidExtension}");
 
     /// <summary>

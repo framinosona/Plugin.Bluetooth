@@ -2,6 +2,9 @@ namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothCharacteristic
 {
+    /// <summary>
+    /// Gets a value indicating whether a read value operation is currently in progress.
+    /// </summary>
     public bool IsReadingValue
     {
         get => GetValue(false);
@@ -66,8 +69,19 @@ public abstract partial class BaseBluetoothCharacteristic
 
     #endregion
 
+    /// <summary>
+    /// Platform-specific implementation to read the characteristic's value.
+    /// </summary>
+    /// <param name="nativeOptions">Platform-specific options for the read operation.</param>
+    /// <param name="timeout">Optional timeout for the operation.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>A task that completes when the native read operation is initiated.</returns>
     protected abstract ValueTask NativeReadValueAsync(Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Called when reading the characteristic's value succeeds. Updates the Value property and completes the task.
+    /// </summary>
+    /// <param name="value">The value read from the characteristic.</param>
     protected void OnReadValueSucceeded(ReadOnlyMemory<byte> value)
     {
         var old = Value;
@@ -90,6 +104,10 @@ public abstract partial class BaseBluetoothCharacteristic
         throw new CharacteristicUnexpectedReadException(this);
     }
 
+    /// <summary>
+    /// Called when reading the characteristic's value fails. Completes the task with an exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that occurred during the read operation.</param>
     protected void OnReadValueFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource
@@ -105,10 +123,15 @@ public abstract partial class BaseBluetoothCharacteristic
 
     #region CanRead
 
+    /// <summary>
+    /// Platform-specific implementation to determine if the characteristic can be read.
+    /// </summary>
+    /// <returns>True if the characteristic supports read operations; otherwise, false.</returns>
     protected abstract bool NativeCanRead();
 
     private Lazy<bool> LazyCanRead { get; }
 
+    /// <inheritdoc/>
     public bool CanRead => LazyCanRead.Value;
 
     #endregion

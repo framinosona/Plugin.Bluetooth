@@ -1,4 +1,3 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.Abstractions;
 
@@ -41,8 +40,14 @@ public interface IBluetoothActivity : INotifyPropertyChanged
     /// </summary>
     bool IsStarting { get; }
 
+    /// <summary>
+    /// Occurs when the Bluetooth activity is starting.
+    /// </summary>
     event EventHandler Starting;
 
+    /// <summary>
+    /// Occurs when the Bluetooth activity has started.
+    /// </summary>
     event EventHandler Started;
 
     /// <summary>
@@ -74,8 +79,14 @@ public interface IBluetoothActivity : INotifyPropertyChanged
     /// </summary>
     bool IsStopping { get; }
 
+    /// <summary>
+    /// Occurs when the Bluetooth manager is stopping.
+    /// </summary>
     event EventHandler Stopping;
 
+    /// <summary>
+    /// Occurs when the Bluetooth manager has stopped.
+    /// </summary>
     event EventHandler Stopped;
 
     /// <summary>

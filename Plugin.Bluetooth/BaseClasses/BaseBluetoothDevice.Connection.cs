@@ -1,9 +1,9 @@
-using Plugin.Bluetooth.EventArgs;
 
 namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoothDevice
 {
+    /// <inheritdoc/>
     public bool IsConnected
     {
         get => GetValue(false);
@@ -23,23 +23,38 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         }
     }
 
+    /// <summary>
+    /// Waits for the device's connection status to reach the specified state.
+    /// </summary>
+    /// <param name="isConnected">The desired connection state to wait for.</param>
+    /// <param name="timeout">Optional timeout for the operation.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>A task that completes when the device reaches the desired connection state.</returns>
     public ValueTask WaitForIsConnectedAsync(bool isConnected, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         return WaitForPropertyToBeOfValue(nameof(IsConnected), isConnected, timeout, cancellationToken);
     }
 
+    /// <summary>
+    /// Platform-specific implementation to refresh the current connection state from the native platform.
+    /// </summary>
     protected abstract void NativeRefreshIsConnected();
 
     #region Connection - Connect
 
+    /// <summary>
+    /// Gets a value indicating whether a connection operation is currently in progress.
+    /// </summary>
     public bool IsConnecting
     {
         get => GetValue(false);
         private set => SetValue(value);
     }
 
+    /// <inheritdoc/>
     public event EventHandler? Connected;
 
+    /// <inheritdoc/>
     public event EventHandler? Connecting;
 
     private TaskCompletionSource? ConnectionTcs
@@ -48,6 +63,9 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         set => SetValue(value);
     }
 
+    /// <summary>
+    /// Called when a connection attempt succeeds. Updates the connection state and completes the connection task.
+    /// </summary>
     protected void OnConnectSucceeded()
     {
         NativeRefreshIsConnected();
@@ -68,6 +86,10 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         throw new DeviceFailedToConnectException(this);
     }
 
+    /// <summary>
+    /// Called when a connection attempt fails. Completes the connection task with an exception or dispatches to the unhandled exception listener.
+    /// </summary>
+    /// <param name="e">The exception that occurred during the connection attempt.</param>
     protected void OnConnectFailed(Exception e)
     {
         NativeRefreshIsConnected();
@@ -140,20 +162,31 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         }
     }
 
+    /// <summary>
+    /// Platform-specific implementation to initiate a connection to the device.
+    /// </summary>
+    /// <param name="nativeOptions">Platform-specific options for the connection.</param>
+    /// <param name="timeout">Optional timeout for the connection attempt.</param>
+    /// <param name="cancellationToken">Token to cancel the connection attempt.</param>
     protected abstract void NativeConnect(Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
     #region Connection - Disconnect
 
+    /// <summary>
+    /// Gets a value indicating whether a disconnection operation is currently in progress.
+    /// </summary>
     public bool IsDisconnecting
     {
         get => GetValue(false);
         private set => SetValue(value);
     }
 
+    /// <inheritdoc/>
     public event EventHandler? Disconnected;
 
+    /// <inheritdoc/>
     public event EventHandler? Disconnecting;
 
     private TaskCompletionSource? DisconnectionTcs
@@ -162,6 +195,10 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         set => SetValue(value);
     }
 
+    /// <summary>
+    /// Called when a disconnection occurs, either intentionally or unexpectedly. Completes the disconnection task.
+    /// </summary>
+    /// <param name="e">Optional exception that caused the disconnection.</param>
     protected void OnDisconnect(Exception? e = null)
     {
         NativeRefreshIsConnected();
@@ -233,16 +270,30 @@ public abstract partial class BaseBluetoothDevice : BaseBindableObject, IBluetoo
         }
     }
 
+    /// <summary>
+    /// Platform-specific implementation to initiate a disconnection from the device.
+    /// </summary>
+    /// <param name="nativeOptions">Platform-specific options for the disconnection.</param>
+    /// <param name="timeout">Optional timeout for the disconnection attempt.</param>
+    /// <param name="cancellationToken">Token to cancel the disconnection attempt.</param>
     protected abstract void NativeDisconnect(Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 
     #endregion
 
     #region Connection - UnexpectedDisconnection
 
+    /// <inheritdoc/>
     public event EventHandler<DeviceUnexpectedDisconnectionEventArgs>? UnexpectedDisconnection;
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the next unexpected disconnection should be ignored.
+    /// </summary>
     public bool IgnoreNextUnexpectedDisconnection { get; set; }
 
+    /// <summary>
+    /// Called when an unexpected disconnection occurs. Clears services and raises the UnexpectedDisconnection event.
+    /// </summary>
+    /// <param name="e">Optional exception that caused the unexpected disconnection.</param>
     protected virtual void OnUnexpectedDisconnection(Exception? e = null)
     {
         ClearServicesAsync().StartAndForget(ex => BluetoothUnhandledExceptionListener.OnBluetoothUnhandledException(this, ex));
