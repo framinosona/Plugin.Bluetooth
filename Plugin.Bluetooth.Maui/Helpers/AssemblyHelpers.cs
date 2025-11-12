@@ -1,5 +1,5 @@
 
-namespace Plugin.Bluetooth.Helpers;
+namespace Plugin.Bluetooth.Maui.Helpers;
 
 /// <summary>
 ///   Helper methods for working with assemblies.

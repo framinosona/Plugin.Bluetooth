@@ -1,4 +1,4 @@
-namespace Plugin.Bluetooth;
+namespace Plugin.Bluetooth.Maui;
 
 /// <summary>
 ///     Optional Logging flags to enable/disable parts of the logs
