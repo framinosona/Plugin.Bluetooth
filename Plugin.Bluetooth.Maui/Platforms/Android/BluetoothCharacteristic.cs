@@ -2,8 +2,14 @@ using Plugin.Bluetooth.Maui.PlatformSpecific;
 
 namespace Plugin.Bluetooth.Maui;
 
-public class BluetoothCharacteristic : BaseBluetoothCharacteristic
+public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic, BluetoothGattProxy.ICharacteristic
 {
+    /// <summary>
+    ///     See org.bluetooth.descriptor.gatt.client_characteristic_configuration in https://
+    ///     www.bluetooth.com/specifications/gatt/descriptors/
+    /// </summary>
+    public const string NotificationDescriptorId = "00002902-0000-1000-8000-00805f9b34fb";
+
     public BluetoothGattCharacteristic NativeCharacteristic { get; }
 
     public BluetoothGattProxy BluetoothGattProxy { get; }
@@ -17,44 +23,4 @@ public class BluetoothCharacteristic : BaseBluetoothCharacteristic
         BluetoothGattProxy = androidDevice.BluetoothGattProxy ?? throw new InvalidOperationException("The BluetoothGattProxy is not initialized.");
         NativeCharacteristic = bluetoothGattCharacteristic;
     }
-
-    #region BaseBluetoothCharacteristic
-
-    protected override bool NativeCanListen()
-    {
-        throw new NotImplementedException();
-    }
-
-    protected async override ValueTask NativeReadIsListeningAsync(Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected async override ValueTask NativeWriteIsListeningAsync(bool shouldBeListening, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected async override ValueTask NativeReadValueAsync(Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override bool NativeCanRead()
-    {
-        throw new NotImplementedException();
-    }
-
-    protected async override ValueTask NativeWriteValueAsync(ReadOnlyMemory<byte> value, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override bool NativeCanWrite()
-    {
-        throw new NotImplementedException();
-    }
-
-    #endregion
-
 }
