@@ -10,12 +10,14 @@ namespace Plugin.Bluetooth.Maui;
 
 public partial class BluetoothCharacteristic
 {
+    /// <inheritdoc/>
     protected override bool NativeCanListen()
     {
         return NativeCharacteristic.Properties.HasFlag(GattProperty.Indicate) || NativeCharacteristic.Properties.HasFlag(GattProperty.Notify);
     }
 
-    protected async override ValueTask NativeReadIsListeningAsync(Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    protected override ValueTask NativeReadIsListeningAsync(Dictionary<string, object>? nativeOptions = null)
     {
         // Ensure BluetoothGatt exists and is available
         ArgumentNullException.ThrowIfNull(BluetoothGattProxy, nameof(BluetoothGattProxy));
@@ -33,10 +35,11 @@ public partial class BluetoothCharacteristic
             throw new CharacteristicNotifyException(this, "BluetoothGatt.ReadDescriptor() Failed");
         }
 
-        await Task.Delay(100, cancellationToken).ConfigureAwait(false); // Give time to Android to process this request
+        return ValueTask.CompletedTask;
     }
 
-    protected async override ValueTask NativeWriteIsListeningAsync(bool shouldBeListening, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    protected async override ValueTask NativeWriteIsListeningAsync(bool shouldBeListening, Dictionary<string, object>? nativeOptions = null)
     {
         // Ensure LISTEN is supported
         CharacteristicCantListenException.ThrowIfCantListen(this);
@@ -111,6 +114,14 @@ public partial class BluetoothCharacteristic
     }
 
 
+    /// <summary>
+    /// Called when a GATT descriptor read operation completes on the Android platform.
+    /// This method handles the response from reading the client characteristic configuration descriptor.
+    /// </summary>
+    /// <param name="status">The status of the GATT operation.</param>
+    /// <param name="descriptor">The descriptor that was read.</param>
+    /// <param name="value">The value read from the descriptor.</param>
+    /// <exception cref="AndroidNativeGattCallbackStatusException">Thrown when the GATT status indicates an error.</exception>
     public void OnDescriptorRead(GattStatus status, BluetoothGattDescriptor? descriptor, byte[]? value)
     {
         try
@@ -134,6 +145,13 @@ public partial class BluetoothCharacteristic
         }
     }
 
+    /// <summary>
+    /// Called when a GATT descriptor write operation completes on the Android platform.
+    /// This method handles the response from writing to the client characteristic configuration descriptor.
+    /// </summary>
+    /// <param name="status">The status of the GATT operation.</param>
+    /// <param name="descriptor">The descriptor that was written to.</param>
+    /// <exception cref="AndroidNativeGattCallbackStatusException">Thrown when the GATT status indicates an error.</exception>
     public virtual void OnDescriptorWrite(GattStatus status, BluetoothGattDescriptor? descriptor)
     {
         try
@@ -155,6 +173,14 @@ public partial class BluetoothCharacteristic
         }
     }
 
+    /// <summary>
+    /// Gets the Android-specific notification capability string representation for the characteristic.
+    /// </summary>
+    /// <returns>
+    /// Returns "N*" if notifications are enabled and listening, "N" if notifications are supported but not listening,
+    /// "I*" if indications are enabled and listening, "I" if indications are supported but not listening,
+    /// otherwise an empty string if neither notifications nor indications are supported.
+    /// </returns>
     protected override string ToListenString()
     {
         if (NativeCharacteristic.Properties.HasFlag(GattProperty.Notify))

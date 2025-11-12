@@ -2,10 +2,15 @@ namespace Plugin.Bluetooth.BaseClasses;
 
 public abstract partial class BaseBluetoothCharacteristic
 {
+    /// <summary>
+    /// Semaphore used to ensure only one write operation can occur at a time.
+    /// This prevents concurrent write operations that could interfere with each other and ensures proper queuing.
+    /// </summary>
     private SemaphoreSlim WriteSemaphoreSlim { get; } = new SemaphoreSlim(1, 1);
 
     /// <summary>
     /// Gets a value indicating whether a write value operation is currently in progress.
+    /// This flag helps prevent concurrent write operations and tracks the operation state.
     /// </summary>
     public bool IsWritingValue
     {
@@ -13,6 +18,10 @@ public abstract partial class BaseBluetoothCharacteristic
         private set => SetValue(value);
     }
 
+    /// <summary>
+    /// Gets or sets the task completion source for the current write value operation.
+    /// Used to signal completion of asynchronous write value operations.
+    /// </summary>
     private TaskCompletionSource? WriteValueTcs
     {
         get => GetValue<TaskCompletionSource?>(null);
@@ -22,6 +31,11 @@ public abstract partial class BaseBluetoothCharacteristic
     #region IBluetoothCharacteristic Members
 
     /// <inheritdoc/>
+    /// <exception cref="DeviceNotConnectedException">Thrown when the device is not connected.</exception>
+    /// <exception cref="CharacteristicCantWriteException">Thrown when the characteristic does not support write operations.</exception>
+    /// <exception cref="CharacteristicAlreadyWritingException">Thrown when another write operation is already in progress despite semaphore protection.</exception>
+    /// <exception cref="OperationCanceledException">Thrown when the operation is cancelled via the cancellation token.</exception>
+    /// <exception cref="TimeoutException">Thrown when the operation times out.</exception>
     public async Task WriteValueAsync(ReadOnlyMemory<byte> value, bool skipIfOldValueMatchesNewValue = false, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
     {
         // Ensure Device is Connected
@@ -51,7 +65,7 @@ public abstract partial class BaseBluetoothCharacteristic
         try
         {
             // Actual start writing native call
-            await NativeWriteValueAsync(value, nativeOptions, timeout, cancellationToken).ConfigureAwait(false);
+            await NativeWriteValueAsync(value, nativeOptions).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -76,12 +90,23 @@ public abstract partial class BaseBluetoothCharacteristic
 
     #endregion
 
-    /// <inheritdoc/>
-    protected abstract ValueTask NativeWriteValueAsync(ReadOnlyMemory<byte> value, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Platform-specific implementation to write the characteristic's value.
+    /// This method should initiate the platform-specific operation to write the value to the characteristic.
+    /// </summary>
+    /// <param name="value">The value to write to the characteristic.</param>
+    /// <param name="nativeOptions">Platform-specific options for the write operation.</param>
+    /// <returns>A task that completes when the native write operation is initiated.</returns>
+    /// <remarks>
+    /// Implementations should call <see cref="OnWriteValueSucceeded"/> when the operation succeeds
+    /// or <see cref="OnWriteValueFailed"/> when it fails.
+    /// </remarks>
+    protected abstract ValueTask NativeWriteValueAsync(ReadOnlyMemory<byte> value, Dictionary<string, object>? nativeOptions = null);
 
     /// <summary>
     /// Called when writing the characteristic's value succeeds. Completes the task successfully.
     /// </summary>
+    /// <exception cref="CharacteristicUnexpectedWriteException">Thrown when no pending write operation is found to complete.</exception>
     protected void OnWriteValueSucceeded()
     {
         // Attempt to dispatch success to the TaskCompletionSource
@@ -99,6 +124,10 @@ public abstract partial class BaseBluetoothCharacteristic
     /// Called when writing the characteristic's value fails. Completes the task with an exception or dispatches to the unhandled exception listener.
     /// </summary>
     /// <param name="e">The exception that occurred during the write operation.</param>
+    /// <remarks>
+    /// If there's a pending write operation, the exception will be delivered to it. Otherwise, the exception
+    /// will be dispatched to the unhandled exception listener.
+    /// </remarks>
     protected void OnWriteValueFailed(Exception e)
     {
         // Attempt to dispatch exception to the TaskCompletionSource
@@ -116,10 +145,15 @@ public abstract partial class BaseBluetoothCharacteristic
 
     /// <summary>
     /// Platform-specific implementation to determine if the characteristic can be written to.
+    /// This method should check the platform-specific properties to determine write capability.
     /// </summary>
     /// <returns>True if the characteristic supports write operations; otherwise, false.</returns>
     protected abstract bool NativeCanWrite();
 
+    /// <summary>
+    /// Gets a value that determines if the characteristic supports write operations based on platform-specific properties.
+    /// This property is computed once and cached using Lazy initialization.
+    /// </summary>
     private Lazy<bool> LazyCanWrite { get; }
 
     /// <inheritdoc/>

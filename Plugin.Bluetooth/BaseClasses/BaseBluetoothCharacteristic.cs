@@ -10,6 +10,8 @@ public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, 
     /// </summary>
     /// <param name="service">The Bluetooth service associated with this characteristic.</param>
     /// <param name="id">The unique identifier of the characteristic.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="service"/> is null.</exception>
+    /// <exception cref="CharacteristicFoundInWrongServiceException">Thrown when the characteristic is defined for a different service than the one provided.</exception>
     protected BaseBluetoothCharacteristic(IBluetoothService service, Guid id)
     {
         ArgumentNullException.ThrowIfNull(service);
@@ -32,8 +34,13 @@ public abstract partial class BaseBluetoothCharacteristic : BaseBindableObject, 
 
     /// <summary>
     /// Performs the core disposal logic for the characteristic, including stopping listening and cleaning up resources.
+    /// This method is called during disposal to ensure proper cleanup of the characteristic's resources.
     /// </summary>
     /// <returns>A task that represents the asynchronous disposal operation.</returns>
+    /// <remarks>
+    /// This method will attempt to stop listening if the characteristic is currently listening for notifications.
+    /// Any exceptions during the stop listening process will be handled by the unhandled exception listener.
+    /// </remarks>
     protected async virtual ValueTask DisposeAsyncCore()
     {
         // Stop listening if active

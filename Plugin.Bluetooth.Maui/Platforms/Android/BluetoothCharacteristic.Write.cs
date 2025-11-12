@@ -7,12 +7,14 @@ namespace Plugin.Bluetooth.Maui;
 
 public partial class BluetoothCharacteristic
 {
+    /// <inheritdoc/>
     protected override bool NativeCanWrite()
     {
         return NativeCharacteristic.Properties.HasFlag(GattProperty.WriteNoResponse) || NativeCharacteristic.Properties.HasFlag(GattProperty.Write) || NativeCharacteristic.Properties.HasFlag(GattProperty.SignedWrite);
     }
 
-    protected async override ValueTask NativeWriteValueAsync(ReadOnlyMemory<byte> value, Dictionary<string, object>? nativeOptions = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    protected async override ValueTask NativeWriteValueAsync(ReadOnlyMemory<byte> value, Dictionary<string, object>? nativeOptions = null)
     {
         // Ensure BluetoothGatt exists and is available
         ArgumentNullException.ThrowIfNull(BluetoothGattProxy, nameof(BluetoothGattProxy));
@@ -78,6 +80,12 @@ public partial class BluetoothCharacteristic
         throw new UnreachableException("This case should be cought by CharacteristicCantWriteException.ThrowIfCantWrite");
     }
 
+    /// <summary>
+    /// Called when a GATT characteristic write operation completes on the Android platform.
+    /// </summary>
+    /// <param name="status">The status of the GATT operation.</param>
+    /// <param name="characteristic">The characteristic that was written to.</param>
+    /// <exception cref="AndroidNativeGattStatusException">Thrown when the GATT status indicates an error.</exception>
     public void OnCharacteristicWrite(GattStatus status, BluetoothGattCharacteristic? characteristic)
     {
         try
@@ -92,6 +100,13 @@ public partial class BluetoothCharacteristic
         }
     }
 
+    /// <summary>
+    /// Gets the Android-specific write capability string representation for the characteristic.
+    /// </summary>
+    /// <returns>
+    /// Returns "WNR" for write without response, "WS" for signed write, "W" for standard write,
+    /// or an empty string if no write operations are supported.
+    /// </returns>
     protected override string ToWriteString()
     {
         if (NativeCharacteristic.Properties.HasFlag(GattProperty.WriteNoResponse))
