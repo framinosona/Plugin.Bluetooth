@@ -1,46 +1,42 @@
 namespace Plugin.Bluetooth.Maui;
 
 /// <inheritdoc />
-public partial class BluetoothBroadcaster : BaseBluetoothBroadcaster
+public class BluetoothBroadcaster : BaseBluetoothBroadcaster
 {
 
-    #region BaseBluetoothBroadcaster
-
+    /// <inheritdoc/>
     protected override void NativeRefreshIsBluetoothOn()
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc/>
     protected override void NativeRefreshIsRunning()
     {
         throw new NotImplementedException();
     }
 
-    protected override void NativeStart(Dictionary<string, object>? nativeOptions)
+    /// <inheritdoc/>
+    protected override void NativeStart(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc/>
     protected override void NativeStop()
     {
         throw new NotImplementedException();
     }
 
-    protected override void NativeRefreshIsBroadcasting()
+    /// <inheritdoc/>
+    protected override ValueTask NativeInitializeAsync(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
 
-    protected async override ValueTask NativeInitializeAsync()
+    /// <inheritdoc/>
+    public override Task NativeSetAdvertisingDataAsync(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
-
-    public async override Task NativeSetAdvertisingDataAsync(IEnumerable<Guid> serviceGuids)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    #endregion
 }

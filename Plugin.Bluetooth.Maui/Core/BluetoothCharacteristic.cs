@@ -1,8 +1,10 @@
 namespace Plugin.Bluetooth.Maui;
 
+/// <inheritdoc/>
 public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic
 {
 
+    /// <inheritdoc/>
     public BluetoothCharacteristic(IBluetoothService service, Guid id) : base(service, id)
     {
     }

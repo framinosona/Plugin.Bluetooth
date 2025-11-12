@@ -15,7 +15,7 @@ public partial class BluetoothScanner : BaseBluetoothScanner
         throw new NotImplementedException();
     }
 
-    protected override void NativeStart(Dictionary<string, object>? nativeOptions)
+    protected override void NativeStart(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
@@ -25,7 +25,7 @@ public partial class BluetoothScanner : BaseBluetoothScanner
         throw new NotImplementedException();
     }
 
-    protected async override ValueTask NativeInitializeAsync(Dictionary<string, object>? options = null)
+    protected async override ValueTask NativeInitializeAsync(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
