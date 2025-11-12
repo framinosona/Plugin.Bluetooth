@@ -1,10 +1,14 @@
+using Plugin.Bluetooth.Maui.PlatformSpecific;
+
 namespace Plugin.Bluetooth.Maui;
 
-public partial class BluetoothService : BaseBluetoothService
+public partial class BluetoothService : BaseBluetoothService, CbPeripheralProxy.ICbServiceDelegate
 {
+    public CBService NativeService { get; }
 
-    public BluetoothService(IBluetoothDevice device, Guid serviceUuid) : base(device, serviceUuid)
+    public BluetoothService(IBluetoothDevice device, Guid serviceUuid, CBService nativeService) : base(device, serviceUuid)
     {
+        NativeService = nativeService;
     }
 
     #region BaseBluetoothService
@@ -16,4 +20,20 @@ public partial class BluetoothService : BaseBluetoothService
 
     #endregion
 
+    #region CbPeripheralProxy.ICbServiceDelegate
+    public void DiscoveredIncludedService(NSError? error, CBService service)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DiscoveredCharacteristics(NSError? error, CBService service)
+    {
+        throw new NotImplementedException();
+    }
+
+    public CbPeripheralProxy.ICbCharacteristicDelegate GetCharacteristic(CBCharacteristic? characteristic)
+    {
+        throw new NotImplementedException();
+    }
+    #endregion
 }

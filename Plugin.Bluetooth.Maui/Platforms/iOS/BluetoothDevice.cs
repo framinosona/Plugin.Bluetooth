@@ -2,17 +2,18 @@ using Plugin.Bluetooth.Maui.PlatformSpecific;
 
 namespace Plugin.Bluetooth.Maui;
 
-public partial class BluetoothDevice : BaseBluetoothDevice
+public partial class BluetoothDevice : BaseBluetoothDevice, CbPeripheralProxy.ICbPeripheralProxyDelegate, CbCentralManagerProxy.ICbPeripheralDelegate
 {
     public CbPeripheralProxy CbPeripheralDelegateProxy { get; }
+
     public BluetoothDevice(IBluetoothScanner scanner, string id, Manufacturer manufacturer, CbPeripheralProxy cbPeripheralDelegateProxy) : base(scanner, id, manufacturer)
     {
         CbPeripheralDelegateProxy = cbPeripheralDelegateProxy;
     }
 
-    public BluetoothDevice(IBluetoothScanner scanner, IBluetoothAdvertisement advertisement, CbPeripheralProxy cbPeripheralDelegateProxy) : base(scanner, advertisement)
+    public BluetoothDevice(IBluetoothScanner scanner, BluetoothAdvertisement advertisement) : base(scanner, advertisement)
     {
-        CbPeripheralDelegateProxy = cbPeripheralDelegateProxy;
+        CbPeripheralDelegateProxy = new CbPeripheralProxy(this, advertisement.Peripheral);
     }
 
     #region BaseBluetoothDevice
@@ -43,4 +44,83 @@ public partial class BluetoothDevice : BaseBluetoothDevice
     }
 
     #endregion
+
+    #region CbPeripheralProxy.ICbPeripheralProxyDelegate
+
+    public void DiscoveredService(NSError? error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RssiRead(NSError? error, NSNumber rssi)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RssiUpdated(NSError? error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdatedName()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DidOpenL2CapChannel(NSError? error, CBL2CapChannel? channel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void IsReadyToSendWriteWithoutResponse()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ModifiedServices(CBService[] services)
+    {
+        throw new NotImplementedException();
+    }
+
+    public CbPeripheralProxy.ICbServiceDelegate GetService(CBService? characteristicService)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
+
+    #region CbCentralManagerProxy.ICbPeripheralDelegate
+
+    public void FailedToConnectPeripheral(NSError? error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DisconnectedPeripheral(NSError? error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ConnectedPeripheral()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ConnectionEventDidOccur(CBConnectionEvent connectionEvent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DidUpdateAncsAuthorization()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DidDisconnectPeripheral(double timestamp, bool isReconnecting, NSError? error)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
+
 }

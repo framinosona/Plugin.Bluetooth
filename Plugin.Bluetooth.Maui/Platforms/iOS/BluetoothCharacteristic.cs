@@ -1,10 +1,14 @@
+using Plugin.Bluetooth.Maui.PlatformSpecific;
+
 namespace Plugin.Bluetooth.Maui;
 
-public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic
+public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic, CbPeripheralProxy.ICbCharacteristicDelegate
 {
+    public CBCharacteristic NativeCharacteristic { get; }
 
-    public BluetoothCharacteristic(IBluetoothService service, Guid id) : base(service, id)
+    public BluetoothCharacteristic(IBluetoothService service, Guid id, CBCharacteristic native) : base(service, id)
     {
+        NativeCharacteristic = native;
     }
 
     #region BaseBluetoothCharacteristic
@@ -46,4 +50,35 @@ public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic
 
     #endregion
 
+    #region CbPeripheralProxy.ICbCharacteristicDelegate
+    public void DiscoveredDescriptor(NSError? error, CBCharacteristic characteristic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void WroteCharacteristicValue(NSError? error, CBCharacteristic characteristic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdatedCharacteristicValue(NSError? error, CBCharacteristic characteristic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdatedNotificationState(NSError? error, CBCharacteristic characteristic)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdatedValue(NSError? error, CBDescriptor descriptor)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void WroteDescriptorValue(NSError? error, CBDescriptor descriptor)
+    {
+        throw new NotImplementedException();
+    }
+    #endregion
 }
