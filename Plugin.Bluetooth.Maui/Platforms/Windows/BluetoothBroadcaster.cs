@@ -1,10 +1,15 @@
+using Plugin.Bluetooth.Maui.PlatformSpecific;
+
 namespace Plugin.Bluetooth.Maui;
 
 /// <inheritdoc />
-public partial class BluetoothBroadcaster : BaseBluetoothBroadcaster
+public partial class BluetoothBroadcaster : BaseBluetoothBroadcaster, BluetoothLeAdvertisementPublisherProxy.IBluetoothLeAdvertisementPublisherProxyDelegate
 {
 
+    public BluetoothLeAdvertisementPublisherProxy? BluetoothLeAdvertisementPublisherProxy { get; protected set; }
+
     #region BaseBluetoothBroadcaster
+
 
     protected override void NativeRefreshIsBluetoothOn()
     {
@@ -16,7 +21,7 @@ public partial class BluetoothBroadcaster : BaseBluetoothBroadcaster
         throw new NotImplementedException();
     }
 
-    protected override void NativeStart(Dictionary<string, object>? nativeOptions)
+    protected override void NativeStart(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
@@ -26,21 +31,25 @@ public partial class BluetoothBroadcaster : BaseBluetoothBroadcaster
         throw new NotImplementedException();
     }
 
-    protected override void NativeRefreshIsBroadcasting()
+    protected async override ValueTask NativeInitializeAsync(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
 
-    protected async override ValueTask NativeInitializeAsync()
+    public async override Task NativeSetAdvertisingDataAsync(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
-
-    public async override Task NativeSetAdvertisingDataAsync(IEnumerable<Guid> serviceGuids)
-    {
-        throw new NotImplementedException();
-    }
-
 
     #endregion
+
+    #region BluetoothLeAdvertisementPublisherProxy.IBluetoothLeAdvertisementPublisherProxyDelegate
+
+    public void OnAdvertisementPublisherStatusChanged(BluetoothLEAdvertisementPublisherStatus status)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
+
 }

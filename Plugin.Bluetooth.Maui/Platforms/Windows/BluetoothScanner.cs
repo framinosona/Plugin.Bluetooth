@@ -1,8 +1,11 @@
+using Plugin.Bluetooth.Maui.PlatformSpecific;
+
 namespace Plugin.Bluetooth.Maui;
 
 /// <inheritdoc  />
-public partial class BluetoothScanner : BaseBluetoothScanner
+public partial class BluetoothScanner : BaseBluetoothScanner, BluetoothLeAdvertisementWatcherProxy.IBluetoothLeAdvertisementWatcherProxyDelegate
 {
+    public BluetoothLeAdvertisementWatcherProxy? BluetoothLeAdvertisementWatcherProxy { get; protected set; }
 
     #region BaseBluetoothScanner
     protected override void NativeRefreshIsBluetoothOn()
@@ -15,7 +18,7 @@ public partial class BluetoothScanner : BaseBluetoothScanner
         throw new NotImplementedException();
     }
 
-    protected override void NativeStart(Dictionary<string, object>? nativeOptions)
+    protected override void NativeStart(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
@@ -25,7 +28,7 @@ public partial class BluetoothScanner : BaseBluetoothScanner
         throw new NotImplementedException();
     }
 
-    protected async override ValueTask NativeInitializeAsync(Dictionary<string, object>? options = null)
+    protected async override ValueTask NativeInitializeAsync(Dictionary<string, object>? nativeOptions = null)
     {
         throw new NotImplementedException();
     }
@@ -34,5 +37,19 @@ public partial class BluetoothScanner : BaseBluetoothScanner
     {
         throw new NotImplementedException();
     }
+    #endregion
+
+    #region BluetoothLeAdvertisementWatcherProxy.IBluetoothLeAdvertisementWatcherProxyDelegate
+
+    public void OnAdvertisementWatcherStopped(BluetoothError argsError)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnAdvertisementReceived(BluetoothLEAdvertisementReceivedEventArgs argsAdvertisement)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 }

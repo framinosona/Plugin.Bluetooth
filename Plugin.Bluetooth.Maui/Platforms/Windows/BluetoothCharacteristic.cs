@@ -1,13 +1,18 @@
+using Plugin.Bluetooth.Maui.PlatformSpecific;
+
 namespace Plugin.Bluetooth.Maui;
 
-public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic
+public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic, GattCharacteristicProxy.IBluetoothCharacteristicProxyDelegate
 {
+    public GattCharacteristicProxy GattCharacteristicProxy { get; }
 
-    public BluetoothCharacteristic(IBluetoothService service, Guid id) : base(service, id)
+    public BluetoothCharacteristic(IBluetoothService service, Guid id, GattCharacteristic nativeCharacteristic) : base(service, id)
     {
+        GattCharacteristicProxy = new GattCharacteristicProxy(nativeCharacteristic, bluetoothCharacteristicProxyDelegate: this);
     }
 
     #region BaseBluetoothCharacteristic
+
     protected override bool NativeCanListen()
     {
         throw new NotImplementedException();
@@ -42,5 +47,16 @@ public partial class BluetoothCharacteristic : BaseBluetoothCharacteristic
     {
         throw new NotImplementedException();
     }
+
     #endregion
+
+    #region GattCharacteristicProxy.IBluetoothCharacteristicProxyDelegate
+
+    public void OnValueChanged(byte[] value, DateTimeOffset argsTimestamp)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
+
 }
