@@ -4,6 +4,14 @@ namespace Plugin.Bluetooth.Maui;
 
 public class BluetoothAdvertisement : BaseBluetoothAdvertisement
 {
+    public ScanResult ScanResult { get; }
+
+    public ScanRecord ScanRecord { get; }
+
+    public IReadOnlyList<ScanRecordPart> ScanRecordParts { get; }
+
+    public Android.Bluetooth.BluetoothDevice BluetoothDevice { get; }
+
     public BluetoothAdvertisement(ScanResult scanResult)
     {
         ArgumentNullException.ThrowIfNull(scanResult, nameof(scanResult));
@@ -20,15 +28,7 @@ public class BluetoothAdvertisement : BaseBluetoothAdvertisement
         // note: check "added in api level..." here https://developer.android.com/reference/android/bluetooth/le/ScanResult.html before adding other get
     }
 
-    public ScanResult ScanResult { get; }
-
-    public ScanRecord ScanRecord { get; }
-
-    public IReadOnlyList<ScanRecordPart> ScanRecordParts { get; }
-
-    public Android.Bluetooth.BluetoothDevice BluetoothDevice { get; }
-
-    #region Init
+    #region BaseBluetoothAdvertisement
 
     /// <inheritdoc/>
     protected override string InitDeviceName()
