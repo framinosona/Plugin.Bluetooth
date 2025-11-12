@@ -39,21 +39,36 @@
 	<!-- ==================== NESTED FILES ======================= -->
 	<ItemGroup>
 		<!-- Files dependent on eachother -->
-		<Compile Update="**\BaseBluetoothCharacteristic.*.cs">
-			<DependentUpon>BaseBluetoothCharacteristic.cs</DependentUpon>
-		</Compile>
-		<Compile Update="**\BaseBluetoothDevice.*.cs">
-			<DependentUpon>BaseBluetoothDevice.cs</DependentUpon>
-		</Compile>
-		<Compile Update="**\BaseBluetoothManager.*.cs">
-			<DependentUpon>BaseBluetoothManager.cs</DependentUpon>
-		</Compile>
-		<Compile Update="**\BaseBluetoothScanner.*.cs">
-			<DependentUpon>BaseBluetoothScanner.cs</DependentUpon>
-		</Compile>
-		<Compile Update="**\BaseBluetoothService.*.cs">
-			<DependentUpon>BaseBluetoothService.cs</DependentUpon>
-		</Compile>
+        <Compile Update="**\BaseBluetoothCharacteristic.*.cs">
+            <DependentUpon>BaseBluetoothCharacteristic.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BaseBluetoothDevice.*.cs">
+            <DependentUpon>BaseBluetoothDevice.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BaseBluetoothManager.*.cs">
+            <DependentUpon>BaseBluetoothManager.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BaseBluetoothScanner.*.cs">
+            <DependentUpon>BaseBluetoothScanner.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BaseBluetoothService.*.cs">
+            <DependentUpon>BaseBluetoothService.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BluetoothCharacteristic.*.cs">
+            <DependentUpon>BluetoothCharacteristic.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BluetoothDevice.*.cs">
+            <DependentUpon>BluetoothDevice.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BluetoothManager.*.cs">
+            <DependentUpon>BluetoothManager.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BluetoothScanner.*.cs">
+            <DependentUpon>BluetoothScanner.cs</DependentUpon>
+        </Compile>
+        <Compile Update="**\BluetoothService.*.cs">
+            <DependentUpon>BluetoothService.cs</DependentUpon>
+        </Compile>
 	</ItemGroup>
 
 </Project>
